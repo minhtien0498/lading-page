@@ -1,0 +1,428 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Header styles */
+header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 {
+    color: #1a237e;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #1a237e;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #3949ab;
+}
+
+/* Main content */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Profile Section */
+.profile-section {
+    margin-bottom: 4rem;
+}
+
+.profile-header {
+    display: flex;
+    gap: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.profile-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h2 {
+    color: #1a237e;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.profile-info .title {
+    font-size: 1.2rem;
+    color: #3949ab;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info .institution {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.research-interests {
+    margin-top: 2rem;
+}
+
+.research-interests h3 {
+    color: #1a237e;
+    margin-bottom: 1rem;
+}
+
+.research-interests ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.research-interests li {
+    background: #e8eaf6;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: #1a237e;
+}
+
+/* Publications Section */
+.publications-section {
+    margin-bottom: 4rem;
+}
+
+.publications-section h2 {
+    color: #1a237e;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.publications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.publication {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.publication:hover {
+    transform: translateY(-5px);
+}
+
+.publication img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.publication-content {
+    padding: 1.5rem;
+}
+
+.publication h3 {
+    color: #1a237e;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.publication .journal {
+    color: #3949ab;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.publication .authors {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.publication .excerpt {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.read-paper {
+    display: inline-block;
+    color: #3949ab;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+}
+
+.read-paper:hover {
+    text-decoration: underline;
+}
+
+/* Research Section */
+.research-section {
+    margin-bottom: 4rem;
+}
+
+.research-section h2 {
+    color: #1a237e;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.research-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.research-item {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.research-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.research-item h3 {
+    padding: 1rem;
+    color: #1a237e;
+}
+
+.research-item p {
+    padding: 0 1rem 1rem;
+    color: #666;
+}
+
+/* Contact Section */
+.contact-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.contact-section h2 {
+    color: #1a237e;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.contact-info {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.contact-info p {
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.contact-info strong {
+    color: #1a237e;
+}
+
+/* Contact Form Styles */
+.contact-form-container {
+    margin-top: 2rem;
+}
+
+.contact-form-container h3 {
+    color: #1a237e;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #1a237e;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3949ab;
+    box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.1);
+}
+
+.form-group select {
+    background-color: white;
+    cursor: pointer;
+}
+
+.submit-button {
+    background-color: #1a237e;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    justify-self: start;
+}
+
+.submit-button:hover {
+    background-color: #3949ab;
+}
+
+/* Social Media Links */
+.social-links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1a237e;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #3949ab;
+    transform: translateY(-2px);
+}
+
+.social-icon i {
+    font-size: 1.5rem;
+}
+
+.zalo-icon {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background: #1a237e;
+    color: white;
+    margin-top: 3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-image {
+        margin: 0 auto;
+    }
+
+    .research-interests ul {
+        justify-content: center;
+    }
+
+    .publications-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .research-highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-form {
+        gap: 1rem;
+    }
+
+    .submit-button {
+        width: 100%;
+        justify-self: stretch;
+    }
+} 
