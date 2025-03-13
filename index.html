@@ -6,21 +6,39 @@
     <title>Dr. Hoa Le - Chemistry Research</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <h1>Dr. Hoa Le</h1>
-            <ul>
-                <li><a href="#home">About</a></li>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">About</a></li>
                 <li><a href="#publications">Research & Patents</a></li>
                 <li><a href="#research">Research</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </nav>
     </header>
 
     <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Advancing Chemistry Research</h1>
+                <p class="hero-subtitle">Innovative Solutions for Water Quality & Environmental Protection</p>
+                <div class="hero-cta">
+                    <a href="#research" class="cta-button">Explore Research</a>
+                    <a href="#contact" class="cta-button secondary">Get in Touch</a>
+                </div>
+            </div>
+            <div class="particles" id="particles-js"></div>
+        </section>
+
         <section id="home" class="profile-section">
             <div class="profile-header">
                 <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144" alt="Dr. Hoa Le" class="profile-image">
@@ -162,65 +180,204 @@
             </div>
         </section>
 
+        <section class="testimonials-section">
+            <h2>What Our Partners Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>"Dr. Le's research on water quality monitoring has been groundbreaking. Her innovative approach has significantly improved our environmental assessment methods."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a" alt="Dr. Nguyen">
+                        <div class="author-info">
+                            <h4>Dr. Nguyen Van An</h4>
+                            <p>Director, Environmental Research Institute</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>"The collaboration with Dr. Le has been exceptional. Her expertise in chemical analysis has helped us develop more efficient water treatment solutions."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2" alt="Dr. Tran">
+                        <div class="author-info">
+                            <h4>Dr. Tran Thi Binh</h4>
+                            <p>Head of Research, Water Treatment Corp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>"Dr. Le's work on green chemistry has set new standards in sustainable water treatment. Her research continues to inspire our team."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Dr. Pham">
+                        <div class="author-info">
+                            <h4>Dr. Pham Van Cuong</h4>
+                            <p>Research Director, Sustainable Tech Institute</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-label">Research Papers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="1">0</div>
+                    <div class="stat-label">Patents</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-label">Research Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-label">Industry Partners</div>
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="contact-section">
             <h2>Contact Information</h2>
-            <div class="contact-info">
-                <p><strong>Email:</strong> hoale@hcmus.edu.vn</p>
-                <p><strong>Office:</strong> Chemistry Department, Room 405</p>
-                <p><strong>Phone:</strong> (84) xxx-xxx-xxx</p>
-                <p><strong>Address:</strong> Faculty of Chemistry, HCMUS, 227 Nguyen Van Cu Street, District 5, Ho Chi Minh City, Vietnam</p>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>hoale@hcmus.edu.vn</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Office</h3>
+                        <p>Chemistry Department, Room 405</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>(84) xxx-xxx-xxx</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-building"></i>
+                        <h3>Address</h3>
+                        <p>Faculty of Chemistry, HCMUS</p>
+                        <p>227 Nguyen Van Cu Street</p>
+                        <p>District 5, Ho Chi Minh City</p>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <h3>Send a Message</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="purpose">Purpose of Contact</label>
+                            <select id="purpose" name="purpose" required>
+                                <option value="">Select a purpose</option>
+                                <option value="research">Research Collaboration</option>
+                                <option value="student">Student Inquiry</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="g-recaptcha" data-sitekey="your-site-key"></div>
+                        </div>
+
+                        <button type="submit" class="submit-button">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rich-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">About</a></li>
+                    <li><a href="#publications">Research & Patents</a></li>
+                    <li><a href="#research">Research Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Research Areas</h3>
+                <ul>
+                    <li>Analytical Chemistry</li>
+                    <li>Environmental Chemistry</li>
+                    <li>Chemical Analysis</li>
+                    <li>Water Treatment</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
                 <div class="social-links">
                     <a href="#" class="social-icon" title="Facebook">
                         <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="social-icon" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-icon" title="ResearchGate">
+                        <i class="fab fa-researchgate"></i>
                     </a>
                     <a href="#" class="social-icon" title="Zalo">
                         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OTYuMjM4IDQ5NiI+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNNDg3LjgzOSAyMjUuMzMyYzAtMTEzLjk2LTkxLjY0LTIwNi40LTIwNC42NC0yMDYuNGgtLjc5OWMtMTEzIDAtMjA0LjY0IDkyLjQ0LTIwNC42NCAyMDYuNCAwIDM5LjA0IDEwLjcyIDc1LjM1OSAyOS40NzkgMTA2LjcxOWwtMjAuMTYgNTguMzE5Yy0xLjY4IDQuODAxLS45NiAxMC4xMiAxLjkyIDE0LjE2IDIuODc5IDQuMDggNy41MTkgNi40OCAxMi40NzkgNi40OGgzOC4zMmM0LjE2IDAgOC4yNC0xLjYgMTEuMzYtNC40OGw1NC43MTktNTAuMjRjMjMuMzYgMTEuNTIgNDguOTYgMTcuNiA3NS4zNTkgMTcuNmguODE5YzExMyAwIDIwNC42NC05Mi40NCAyMDQuNjQtMjA2LjR6bS0yMDUuNDQgMTM4LjI0aC0uNzk5Yy0yNy44NCAwLTUzLjc2LTcuMDQtNzYuMzE5LTIwLjQ4LTQuMjQtMi41Ni05LjYtMi4yNC0xMy41MiAxLjI4bC01MC43MTkgNDYuNTYgMTcuOTItNTEuODRjMS40NC00LjE2LjU2LTguOC0yLjQtMTIuMTZsLTIuNC0yLjRjLTE5LjM1OS0yNy4wNC0yOS41OTktNTkuMi0yOS41OTktOTIuOCAwLTg4LjcyIDcxLjc1OS0xNjEuMjggMTU5LjYtMTYxLjI4aC43OTljODcuODQgMCAxNTkuNiA3Mi41NiAxNTkuNiAxNjEuMjhzLTcxLjc1OSAxNjEuMjgtMTU5LjYgMTYxLjI4em0tNjIuMzE5LTEzNS4yYzAgNS4yOCA0LjE2IDkuNiA5LjI3OSA5LjZoMjUuNnYyNS42YzAgNS4xMiA0LjE2IDkuMjc5IDkuNDQgOS4yNzloLjE2YzUuMTIgMCA5LjI3OS00LjE2IDkuMjc5LTkuMjc5di0yNS42aDI1LjZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtLjE2YzAtNS4xMi00LjE2LTkuMjc5LTkuMjc5LTkuMjc5aC0yNS42di0yNS42YzAtNS4xMi00LjE2LTkuMjc5LTkuNDQtOS4yNzloLS4xNmMtNS4xMiAwLTkuMjc5IDQuMTYtOS4yNzkgOS4yNzl2MjUuNmgtMjUuNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHptMTM1LjY3OSAwYzAgNS4yOCA0LjMyIDkuNiA5LjQ0IDkuNmguMTZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtNjRjMC01LjEyLTQuMTYtOS4yNzktOS40NC05LjI3OWgtLjE2Yy01LjEyIDAtOS4yNzkgNC4xNi05LjI3OSA5LjI3OXptLTkxLjE5OSA4NS43NmMwIDUuMTIgNC4zMiA5LjI3OSA5LjQ0IDkuMjc5aC4xNmM1LjEyIDAgOS4yNzktNC4xNiA5LjI3OS05LjI3OXYtNjRjMC01LjEyLTQuMTYtOS40NC05LjQ0LTkuNDRoLS4xNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHoiLz48L3N2Zz4=" alt="Zalo" class="zalo-icon">
                     </a>
                 </div>
             </div>
-
-            <div class="contact-form-container">
-                <h3>Send a Message</h3>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Your Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Your Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subject">Subject:</label>
-                        <input type="text" id="subject" name="subject" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Message:</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="purpose">Purpose of Contact:</label>
-                        <select id="purpose" name="purpose" required>
-                            <option value="">Select a purpose</option>
-                            <option value="research">Research Collaboration</option>
-                            <option value="student">Student Inquiry</option>
-                            <option value="consulting">Consulting</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="submit-button">Send Message</button>
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <p>Subscribe to our newsletter for updates on research and publications.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
                 </form>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Dr. Hoa Le - HCMUS Chemistry Research. All rights reserved.</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Dr. Hoa Le - HCMUS Chemistry Research. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- Certificate Details Modal -->
@@ -496,6 +653,251 @@
             // Set the data-items attribute based on the number of items
             grid.setAttribute('data-items', itemsCount.toString());
         }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active Menu Item
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+                const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
+                
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    navLink?.classList.add('active');
+                } else {
+                    navLink?.classList.remove('active');
+                }
+            });
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Particles.js Configuration
+        window.addEventListener('load', function() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: {
+                            value: 80,
+                            density: {
+                                enable: true,
+                                value_area: 800
+                            }
+                        },
+                        color: {
+                            value: '#ffffff'
+                        },
+                        shape: {
+                            type: 'circle'
+                        },
+                        opacity: {
+                            value: 0.5,
+                            random: false
+                        },
+                        size: {
+                            value: 3,
+                            random: true
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: '#ffffff',
+                            opacity: 0.4,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 6,
+                            direction: 'none',
+                            random: false,
+                            straight: false,
+                            out_mode: 'out',
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: {
+                                enable: true,
+                                mode: 'repulse'
+                            },
+                            onclick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            resize: true
+                        }
+                    },
+                    retina_detect: true
+                });
+            } else {
+                console.error('particles.js library not loaded');
+            }
+        });
+
+        // Stats Counter Animation
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            if (!stats.length) {
+                console.log('No stats elements found');
+                return;
+            }
+            
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-count'));
+                if (isNaN(target)) {
+                    console.log('Invalid target value:', stat.getAttribute('data-count'));
+                    return;
+                }
+                
+                let current = 0;
+                const increment = target / 100;
+                const duration = 2000;
+                const interval = duration / 100;
+
+                const updateStat = () => {
+                    current += increment;
+                    if (current < target) {
+                        stat.textContent = Math.floor(current);
+                        setTimeout(updateStat, interval);
+                    } else {
+                        stat.textContent = target;
+                    }
+                };
+
+                updateStat();
+            });
+        }
+
+        // Wait for DOM to be fully loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM loaded, initializing stats');
+                animateStats();
+            });
+        } else {
+            console.log('DOM already loaded, initializing stats');
+            animateStats();
+        }
+
+        // Also initialize when section comes into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('Stats section in view, reinitializing');
+                    animateStats();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            observer.observe(statsSection);
+        } else {
+            console.log('Stats section not found');
+        }
+
+        // Form Validation
+        const contactForm = document.getElementById('contactForm');
+        const formGroups = contactForm.querySelectorAll('.form-group');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, textarea, select');
+                const errorMessage = group.querySelector('.error-message');
+
+                if (!input.value.trim()) {
+                    isValid = false;
+                    errorMessage.textContent = 'This field is required';
+                    errorMessage.style.display = 'block';
+                } else {
+                    errorMessage.style.display = 'none';
+                }
+
+                if (input.type === 'email' && input.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(input.value)) {
+                        isValid = false;
+                        errorMessage.textContent = 'Please enter a valid email address';
+                        errorMessage.style.display = 'block';
+                    }
+                }
+            });
+
+            if (isValid) {
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                successMessage.textContent = 'Message sent successfully!';
+                contactForm.appendChild(successMessage);
+
+                // Reset form
+                contactForm.reset();
+                grecaptcha.reset();
+
+                // Remove success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            }
+        });
+
+        // Newsletter Form
+        const newsletterForm = document.querySelector('.newsletter-form');
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = newsletterForm.querySelector('input').value;
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = 'Thank you for subscribing!';
+            newsletterForm.appendChild(successMessage);
+
+            // Reset form
+            newsletterForm.reset();
+
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        });
     </script>
 
     <style>
@@ -832,7 +1234,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.3);
             z-index: 1;
         }
 
@@ -844,11 +1246,11 @@
             display: flex;
             gap: 3rem;
             align-items: flex-start;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.7);
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(15px);
         }
 
         .profile-image {
@@ -921,6 +1323,618 @@
 
             .research-interests ul {
                 justify-content: center;
+            }
+        }
+
+        /* Hero Section Styles */
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(13, 71, 161, 0.85)), url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s;
+            animation-fill-mode: both;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s;
+            animation-fill-mode: both;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:first-child {
+            background: #fff;
+            color: #1a237e;
+        }
+
+        .cta-button.secondary {
+            border: 2px solid #fff;
+            color: #fff;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Navigation Improvements */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            width: 30px;
+            height: 2px;
+            background: #333;
+            transition: all 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn.active span:nth-child(1) {
+                transform: rotate(45deg) translate(8px, 8px);
+            }
+
+            .mobile-menu-btn.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .mobile-menu-btn.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 6rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .testimonials-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            font-size: 2.5rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-content {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial-content i {
+            color: #3498db;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-content p {
+            color: #666;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .author-info p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        @media screen and (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Contact Section Improvements */
+        .contact-section {
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .contact-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            font-size: 2.5rem;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .contact-form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .contact-form-container h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .submit-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media screen and (max-width: 1024px) {
+            .contact-container {
+                gap: 2rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .info-card {
+                padding: 1.25rem;
+            }
+
+            .contact-form-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .contact-section {
+                padding: 3rem 1rem;
+            }
+
+            .contact-section h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 0.7rem;
+            }
+        }
+
+        /* Rich Footer */
+        .rich-footer {
+            background: #2c3e50;
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            color: #3498db;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #3498db;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #3498db;
+        }
+
+        .zalo-icon {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .newsletter-form button {
+            padding: 0.5rem 1rem;
+            background: #3498db;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: #2980b9;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media screen and (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .newsletter-form {
+                flex-direction: column;
             }
         }
     </style>
