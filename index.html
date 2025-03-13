@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Center - Chemistry Research</title>
+    <title>Chemistry Center - Home</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -13,10 +13,12 @@
         <nav>
             <h1>Chemistry Center</h1>
             <ul class="nav-links">
-                <li><a href="#home" class="active">About</a></li>
-                <li><a href="#publications">Research & Patents</a></li>
-                <li><a href="#research">Research</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="mobile-menu-btn">
                 <span></span>
@@ -30,10 +32,24 @@
         <section class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">Advancing Chemistry Research</h1>
-                <p class="hero-subtitle">Innovative Solutions for Water Quality & Environmental Protection</p>
+                <p class="hero-subtitle">Leading Innovation in Water Quality & Environmental Protection</p>
+                <div class="research-strengths">
+                    <div class="strength-item">
+                        <i class="fas fa-flask"></i>
+                        <span>Advanced Analytical Methods</span>
+                    </div>
+                    <div class="strength-item">
+                        <i class="fas fa-water"></i>
+                        <span>Water Treatment Solutions</span>
+                    </div>
+                    <div class="strength-item">
+                        <i class="fas fa-leaf"></i>
+                        <span>Environmental Protection</span>
+                    </div>
+                </div>
                 <div class="hero-cta">
-                    <a href="#research" class="cta-button">Explore Research</a>
-                    <a href="#contact" class="cta-button secondary">Get in Touch</a>
+                    <a href="research.html" class="cta-button">Explore Research</a>
+                    <a href="contact.html" class="cta-button secondary">Get in Touch</a>
                 </div>
             </div>
             <div class="particles" id="particles-js"></div>
@@ -64,194 +80,6 @@
             </div>
         </section>
 
-        <section id="home" class="profile-section">
-            <div class="profile-header">
-                <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144" alt="Chemistry Center" class="profile-image">
-                <div class="profile-info">
-                    <h2>Chemistry Center</h2>
-                    <p class="title">Senior Researcher - Chemistry Department</p>
-                    <p class="institution">Faculty of Chemistry</p>
-                    <p class="institution">Ho Chi Minh City University of Science (HCMUS)</p>
-                    <div class="research-interests">
-                        <h3>Research Interests</h3>
-                        <ul>
-                            <li>Analytical Chemistry</li>
-                            <li>Environmental Chemistry</li>
-                            <li>Chemical Analysis</li>
-                            <li>Water Treatment</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="publications" class="publications-section">
-            <h2>Research Papers & Patents</h2>
-            <div class="section-navigation">
-                <button class="nav-arrow prev" onclick="navigatePublications('prev')">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <div class="publications-grid">
-                    <article class="publication">
-                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Water Analysis Research">
-                        <div class="publication-content">
-                            <h3>Advanced Methods for Water Quality Analysis in Urban Areas</h3>
-                            <p class="journal">Environmental Science & Technology | 2023</p>
-                            <p class="authors">Le, H., Nguyen, T., Tran, M.</p>
-                            <p class="excerpt">A comprehensive study on water quality analysis methods in urban environments, focusing on rapid detection techniques and real-time monitoring systems.</p>
-                            <div class="publication-actions">
-                                <a href="#" class="read-paper">View Publication</a>
-                                <button onclick="showCertificateDetails(1)" class="view-certificate">
-                                    <i class="fas fa-certificate"></i> View Certificate
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="publication">
-                        <img src="https://images.unsplash.com/photo-1554475900-0a0350e3fc7b" alt="Chemical Analysis Patent">
-                        <div class="publication-content">
-                            <h3>Method and Apparatus for Rapid Chemical Analysis in Field Conditions</h3>
-                            <p class="journal">Patent US20230000000 | 2023</p>
-                            <p class="authors">Le, H., Pham, D., Vo, T.</p>
-                            <p class="excerpt">Innovative portable device for rapid chemical analysis in field conditions, enabling real-time environmental monitoring and data collection.</p>
-                            <div class="publication-actions">
-                                <a href="#" class="read-paper">View Patent</a>
-                                <button onclick="showCertificateDetails(2)" class="view-certificate">
-                                    <i class="fas fa-certificate"></i> View Certificate
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="publication">
-                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557" alt="Environmental Research">
-                        <div class="publication-content">
-                            <h3>Innovative Approaches to Environmental Monitoring in Southeast Asia</h3>
-                            <p class="journal">Journal of Environmental Chemistry | 2022</p>
-                            <p class="authors">Le, H., Tran, Q., Nguyen, L.</p>
-                            <p class="excerpt">Novel methodologies for environmental monitoring in tropical regions, with specific focus on water quality assessment and pollution control.</p>
-                            <div class="publication-actions">
-                                <a href="#" class="read-paper">View Publication</a>
-                                <button onclick="showCertificateDetails(3)" class="view-certificate">
-                                    <i class="fas fa-certificate"></i> View Certificate
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                <button class="nav-arrow next" onclick="navigatePublications('next')">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </section>
-
-        <section id="research" class="research-section">
-            <h2>Current Research Projects</h2>
-            <div class="section-navigation">
-                <button class="nav-arrow prev" onclick="navigateResearch('prev')">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <div class="research-highlights">
-                    <div class="research-item">
-                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Water Analysis">
-                        <h3>Smart Water Quality Monitoring System</h3>
-                        <p>Developing an IoT-based system for real-time water quality monitoring in urban areas. This project focuses on:</p>
-                        <ul class="research-details">
-                            <li>Integration of sensors for pH, dissolved oxygen, and contaminants</li>
-                            <li>Data collection and analysis platform</li>
-                            <li>Early warning system for water quality issues</li>
-                            <li>Cost-effective solution for developing countries</li>
-                        </ul>
-                        <div class="research-status">
-                            <span class="status-badge">In Progress</span>
-                            <span class="funding">Funded by HCMUS Research Grant</span>
-                        </div>
-                    </div>
-                    <div class="research-item">
-                        <img src="https://images.unsplash.com/photo-1554475900-0a0350e3fc7b" alt="Laboratory Research">
-                        <h3>Green Chemistry in Water Treatment</h3>
-                        <p>Investigating sustainable methods for water treatment using natural materials. Key aspects include:</p>
-                        <ul class="research-details">
-                            <li>Development of bio-based adsorbents</li>
-                            <li>Optimization of treatment processes</li>
-                            <li>Reduction of chemical usage</li>
-                            <li>Cost and energy efficiency analysis</li>
-                        </ul>
-                        <div class="research-status">
-                            <span class="status-badge">In Progress</span>
-                            <span class="funding">Collaboration with Industry Partners</span>
-                        </div>
-                    </div>
-                    <div class="research-item">
-                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557" alt="Advanced Materials">
-                        <h3>Advanced Materials for Water Filtration</h3>
-                        <p>Research on novel materials for water filtration systems. Project highlights:</p>
-                        <ul class="research-details">
-                            <li>Development of graphene-based filters</li>
-                            <li>Testing with various water sources</li>
-                            <li>Long-term performance analysis</li>
-                            <li>Cost optimization studies</li>
-                        </ul>
-                        <div class="research-status">
-                            <span class="status-badge">In Progress</span>
-                            <span class="funding">National Research Foundation Grant</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="nav-arrow next" onclick="navigateResearch('next')">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </section>
-
-        <section class="testimonials-section">
-            <h2>What Our Partners Say</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"Dr. Le's research on water quality monitoring has been groundbreaking. Her innovative approach has significantly improved our environmental assessment methods."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a" alt="Dr. Nguyen">
-                        <div class="author-info">
-                            <h4>Dr. Nguyen Van An</h4>
-                            <p>Director, Environmental Research Institute</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"The collaboration with Dr. Le has been exceptional. Her expertise in chemical analysis has helped us develop more efficient water treatment solutions."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2" alt="Dr. Tran">
-                        <div class="author-info">
-                            <h4>Dr. Tran Thi Binh</h4>
-                            <p>Head of Research, Water Treatment Corp</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"Dr. Le's work on green chemistry has set new standards in sustainable water treatment. Her research continues to inspire our team."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Dr. Pham">
-                        <div class="author-info">
-                            <h4>Dr. Pham Van Cuong</h4>
-                            <p>Research Director, Sustainable Tech Institute</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="stats-section">
             <div class="stats-container">
                 <div class="stat-item">
@@ -272,86 +100,6 @@
                 </div>
             </div>
         </section>
-
-        <section id="contact" class="contact-section">
-            <h2>Contact Information</h2>
-            <div class="contact-container">
-                <div class="contact-info">
-                    <div class="info-card">
-                        <i class="fas fa-envelope"></i>
-                        <h3>Email</h3>
-                        <p>chemistrycenter@chemistry.edu.vn</p>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <h3>Office</h3>
-                        <p>Chemistry Department, Room 405</p>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-phone"></i>
-                        <h3>Phone</h3>
-                        <p>(84) xxx-xxx-xxx</p>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-building"></i>
-                        <h3>Address</h3>
-                        <p>Faculty of Chemistry, HCMUS</p>
-                        <p>227 Nguyen Van Cu Street</p>
-                        <p>District 5, Ho Chi Minh City</p>
-                    </div>
-                </div>
-
-                <div class="contact-form-container">
-                    <h3>Send a Message</h3>
-                    <form class="contact-form" id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" required>
-                            <span class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="email" id="email" name="email" required>
-                            <span class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" required>
-                            <span class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                            <span class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="purpose">Purpose of Contact</label>
-                            <select id="purpose" name="purpose" required>
-                                <option value="">Select a purpose</option>
-                                <option value="research">Research Collaboration</option>
-                                <option value="student">Student Inquiry</option>
-                                <option value="consulting">Consulting</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <span class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="g-recaptcha" data-sitekey="your-site-key"></div>
-                        </div>
-
-                        <button type="submit" class="submit-button">
-                            <span>Send Message</span>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="rich-footer">
@@ -359,10 +107,12 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#home">About</a></li>
-                    <li><a href="#publications">Research & Patents</a></li>
-                    <li><a href="#research">Research Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="team.html">Team</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="publications.html">Publications</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -405,329 +155,7 @@
         </div>
     </footer>
 
-    <!-- Certificate Details Modal -->
-    <div id="certificate-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="certificate-details">
-                <h2>Certificate Details</h2>
-                <div id="certificate-content">
-                    <!-- Content will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const certificateData = {
-            1: {
-                title: "Certificate of Publication",
-                publication: "Advanced Methods for Water Quality Analysis in Urban Areas",
-                certificateNo: "CERT-2023-001",
-                issueDate: "March 15, 2023",
-                issuingAuthority: "Environmental Science & Technology Journal",
-                type: "Research Publication",
-                description: "This certificate confirms the publication of the research paper in Environmental Science & Technology Journal, recognizing the significant contribution to the field of environmental chemistry.",
-                additionalInfo: "Impact Factor: 7.864"
-            },
-            2: {
-                title: "Patent Certificate",
-                publication: "Method and Apparatus for Rapid Chemical Analysis in Field Conditions",
-                certificateNo: "PAT-2023-002",
-                issueDate: "June 20, 2023",
-                issuingAuthority: "United States Patent and Trademark Office",
-                type: "Patent Registration",
-                description: "This certificate confirms the registration of the patent for an innovative portable device for chemical analysis.",
-                additionalInfo: "Patent Status: Granted"
-            },
-            3: {
-                title: "Certificate of Publication",
-                publication: "Innovative Approaches to Environmental Monitoring in Southeast Asia",
-                certificateNo: "CERT-2022-003",
-                issueDate: "December 10, 2022",
-                issuingAuthority: "Journal of Environmental Chemistry",
-                type: "Research Publication",
-                description: "This certificate confirms the publication of the research paper in Journal of Environmental Chemistry, recognizing the contribution to environmental monitoring methodologies.",
-                additionalInfo: "Impact Factor: 6.245"
-            }
-        };
-
-        function showCertificateDetails(certId) {
-            const modal = document.getElementById('certificate-modal');
-            const content = document.getElementById('certificate-content');
-            const cert = certificateData[certId];
-
-            content.innerHTML = `
-                <div class="certificate-info">
-                    <h3>${cert.title}</h3>
-                    <div class="cert-detail-row">
-                        <strong>Publication:</strong>
-                        <span>${cert.publication}</span>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Certificate No:</strong>
-                        <span>${cert.certificateNo}</span>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Issue Date:</strong>
-                        <span>${cert.issueDate}</span>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Issuing Authority:</strong>
-                        <span>${cert.issuingAuthority}</span>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Type:</strong>
-                        <span>${cert.type}</span>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Description:</strong>
-                        <p>${cert.description}</p>
-                    </div>
-                    <div class="cert-detail-row">
-                        <strong>Additional Information:</strong>
-                        <span>${cert.additionalInfo}</span>
-                    </div>
-                </div>
-            `;
-
-            modal.style.display = 'block';
-        }
-
-        // Close modal when clicking the close button
-        document.querySelector('.close').onclick = function() {
-            document.getElementById('certificate-modal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('certificate-modal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        // Navigation functionality
-        const publications = [
-            {
-                title: "Advanced Methods for Water Quality Analysis in Urban Areas",
-                journal: "Environmental Science & Technology | 2023",
-                authors: "Le, H., Nguyen, T., Tran, M.",
-                excerpt: "A comprehensive study on water quality analysis methods in urban environments, focusing on rapid detection techniques and real-time monitoring systems.",
-                image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69",
-                certId: 1
-            },
-            {
-                title: "Method and Apparatus for Rapid Chemical Analysis in Field Conditions",
-                journal: "Patent US20230000000 | 2023",
-                authors: "Le, H., Pham, D., Vo, T.",
-                excerpt: "Innovative portable device for rapid chemical analysis in field conditions, enabling real-time environmental monitoring and data collection.",
-                image: "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b",
-                certId: 2
-            },
-            {
-                title: "Innovative Approaches to Environmental Monitoring in Southeast Asia",
-                journal: "Journal of Environmental Chemistry | 2022",
-                authors: "Le, H., Tran, Q., Nguyen, L.",
-                excerpt: "Novel methodologies for environmental monitoring in tropical regions, with specific focus on water quality assessment and pollution control.",
-                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557",
-                certId: 3
-            },
-            {
-                title: "AI-Powered Water Quality Prediction",
-                description: "Implementing machine learning for water quality prediction. Key features:",
-                details: [
-                    "Data collection and preprocessing",
-                    "ML model development",
-                    "Real-time prediction system",
-                    "Integration with existing infrastructure"
-                ],
-                image: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120",
-                funding: "Industry Partnership Program"
-            }
-        ];
-
-        const researchProjects = [
-            {
-                title: "Smart Water Quality Monitoring System",
-                description: "Developing an IoT-based system for real-time water quality monitoring in urban areas. This project focuses on:",
-                details: [
-                    "Integration of sensors for pH, dissolved oxygen, and contaminants",
-                    "Data collection and analysis platform",
-                    "Early warning system for water quality issues",
-                    "Cost-effective solution for developing countries"
-                ],
-                image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69",
-                funding: "Funded by HCMUS Research Grant"
-            },
-            {
-                title: "Green Chemistry in Water Treatment",
-                description: "Investigating sustainable methods for water treatment using natural materials. Key aspects include:",
-                details: [
-                    "Development of bio-based adsorbents",
-                    "Optimization of treatment processes",
-                    "Reduction of chemical usage",
-                    "Cost and energy efficiency analysis"
-                ],
-                image: "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b",
-                funding: "Collaboration with Industry Partners"
-            },
-            {
-                title: "Advanced Materials for Water Filtration",
-                description: "Research on novel materials for water filtration systems. Project highlights:",
-                details: [
-                    "Development of graphene-based filters",
-                    "Testing with various water sources",
-                    "Long-term performance analysis",
-                    "Cost optimization studies"
-                ],
-                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557",
-                funding: "National Research Foundation Grant"
-            },
-            {
-                title: "AI-Powered Water Quality Prediction",
-                description: "Implementing machine learning for water quality prediction. Key features:",
-                details: [
-                    "Data collection and preprocessing",
-                    "ML model development",
-                    "Real-time prediction system",
-                    "Integration with existing infrastructure"
-                ],
-                image: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120",
-                funding: "Industry Partnership Program"
-            }
-        ];
-
-        let currentPublicationIndex = 0;
-        let currentResearchIndex = 0;
-
-        function navigatePublications(direction) {
-            const grid = document.querySelector('.publications-grid');
-            if (direction === 'next' && currentPublicationIndex < publications.length - 3) {
-                currentPublicationIndex++;
-            } else if (direction === 'prev' && currentPublicationIndex > 0) {
-                currentPublicationIndex--;
-            }
-            updatePublicationsDisplay();
-        }
-
-        function navigateResearch(direction) {
-            const grid = document.querySelector('.research-highlights');
-            if (direction === 'next' && currentResearchIndex < researchProjects.length - 3) {
-                currentResearchIndex++;
-            } else if (direction === 'prev' && currentResearchIndex > 0) {
-                currentResearchIndex--;
-            }
-            updateResearchDisplay();
-        }
-
-        function updatePublicationsDisplay() {
-            const grid = document.querySelector('.publications-grid');
-            grid.innerHTML = '';
-            
-            for (let i = 0; i < 3; i++) {
-                const pub = publications[currentPublicationIndex + i];
-                if (pub) {
-                    grid.innerHTML += `
-                        <article class="publication">
-                            <img src="${pub.image}" alt="${pub.title}">
-                            <div class="publication-content">
-                                <h3>${pub.title}</h3>
-                                <p class="journal">${pub.journal}</p>
-                                <p class="authors">${pub.authors}</p>
-                                <p class="excerpt">${pub.excerpt}</p>
-                                <div class="publication-actions">
-                                    <a href="#" class="read-paper">View Publication</a>
-                                    <button onclick="showCertificateDetails(${pub.certId})" class="view-certificate">
-                                        <i class="fas fa-certificate"></i> View Certificate
-                                    </button>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                }
-            }
-        }
-
-        function updateResearchDisplay() {
-            const grid = document.querySelector('.research-highlights');
-            grid.innerHTML = '';
-            
-            let itemsCount = 0;
-            for (let i = 0; i < 3; i++) {
-                const project = researchProjects[currentResearchIndex + i];
-                if (project) {
-                    itemsCount++;
-                    grid.innerHTML += `
-                        <div class="research-item">
-                            <img src="${project.image}" alt="${project.title}">
-                            <h3>${project.title}</h3>
-                            <p>${project.description}</p>
-                            <ul class="research-details">
-                                ${project.details.map(detail => `<li>${detail}</li>`).join('')}
-                            </ul>
-                            <div class="research-status">
-                                <span class="status-badge">In Progress</span>
-                                <span class="funding">${project.funding}</span>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            // Set the data-items attribute based on the number of items
-            grid.setAttribute('data-items', itemsCount.toString());
-        }
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Active Menu Item
-        const sections = document.querySelectorAll('section[id]');
-        window.addEventListener('scroll', () => {
-            const scrollY = window.pageYOffset;
-            sections.forEach(section => {
-                const sectionHeight = section.offsetHeight;
-                const sectionTop = section.offsetTop - 100;
-                const sectionId = section.getAttribute('id');
-                const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
-                
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLink?.classList.add('active');
-                } else {
-                    navLink?.classList.remove('active');
-                }
-            });
-        });
-
-        // Mobile Menu
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-
         // Particles.js Configuration
         window.addEventListener('load', function() {
             if (typeof particlesJS !== 'undefined') {
@@ -824,66 +252,14 @@
                     },
                     retina_detect: true
                 });
-            } else {
-                console.error('particles.js library not loaded');
             }
         });
-
-        // Thêm hạt nhân ở giữa
-        const canvas = document.querySelector('#particles-js canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            
-            function drawNucleus() {
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const radius = 15;
-
-                // Vẽ hiệu ứng phát sáng
-                const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 2);
-                gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
-                gradient.addColorStop(0.3, 'rgba(255, 100, 100, 0.8)');
-                gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius * 2, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-
-                // Vẽ hạt nhân
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff0000';
-                ctx.fill();
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-
-            // Vẽ hạt nhân mỗi frame
-            function animate() {
-                drawNucleus();
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        }
 
         // Stats Counter Animation
         function animateStats() {
             const stats = document.querySelectorAll('.stat-number');
-            if (!stats.length) {
-                console.log('No stats elements found');
-                return;
-            }
-            
             stats.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-count'));
-                if (isNaN(target)) {
-                    console.log('Invalid target value:', stat.getAttribute('data-count'));
-                    return;
-                }
-                
                 let current = 0;
                 const increment = target / 100;
                 const duration = 2000;
@@ -903,22 +279,10 @@
             });
         }
 
-        // Wait for DOM to be fully loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('DOM loaded, initializing stats');
-                animateStats();
-            });
-        } else {
-            console.log('DOM already loaded, initializing stats');
-            animateStats();
-        }
-
-        // Also initialize when section comes into view
+        // Initialize stats when section comes into view
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    console.log('Stats section in view, reinitializing');
                     animateStats();
                     observer.unobserve(entry.target);
                 }
@@ -928,77 +292,23 @@
         const statsSection = document.querySelector('.stats-section');
         if (statsSection) {
             observer.observe(statsSection);
-        } else {
-            console.log('Stats section not found');
         }
 
-        // Form Validation
-        const contactForm = document.getElementById('contactForm');
-        const formGroups = contactForm.querySelectorAll('.form-group');
-
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            let isValid = true;
-
-            formGroups.forEach(group => {
-                const input = group.querySelector('input, textarea, select');
-                const errorMessage = group.querySelector('.error-message');
-
-                if (!input.value.trim()) {
-                    isValid = false;
-                    errorMessage.textContent = 'This field is required';
-                    errorMessage.style.display = 'block';
-                } else {
-                    errorMessage.style.display = 'none';
-                }
-
-                if (input.type === 'email' && input.value) {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(input.value)) {
-                        isValid = false;
-                        errorMessage.textContent = 'Please enter a valid email address';
-                        errorMessage.style.display = 'block';
-                    }
-                }
-            });
-
-            if (isValid) {
-                // Show success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'success-message';
-                successMessage.textContent = 'Message sent successfully!';
-                contactForm.appendChild(successMessage);
-
-                // Reset form
-                contactForm.reset();
-                grecaptcha.reset();
-
-                // Remove success message after 3 seconds
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 3000);
-            }
+        // Mobile Menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
         });
 
-        // Newsletter Form
-        const newsletterForm = document.querySelector('.newsletter-form');
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = newsletterForm.querySelector('input').value;
-            
-            // Show success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.textContent = 'Thank you for subscribing!';
-            newsletterForm.appendChild(successMessage);
-
-            // Reset form
-            newsletterForm.reset();
-
-            // Remove success message after 3 seconds
-            setTimeout(() => {
-                successMessage.remove();
-            }, 3000);
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
         });
     </script>
 </body>
