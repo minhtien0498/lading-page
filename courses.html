@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Center - About Us</title>
+    <title>Chemistry Center - Courses & Resources</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
     <header>
@@ -17,11 +16,11 @@
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="team.html">Team</a></li>
                 <li><a href="research.html">Research</a></li>
                 <li><a href="publications.html">Publications</a></li>
-                <li><a href="courses.html">Courses & Resources</a></li>
+                <li><a href="courses.html" class="active">Courses & Resources</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="mobile-menu-btn">
@@ -33,45 +32,77 @@
     </header>
 
     <main>
-        <section class="about-section">
-            <div class="about-container">
-                <h2>About Chemistry Center</h2>
-                <div class="about-content">
-                    <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144" alt="Chemistry Center">
+        <section class="courses-section">
+            <div class="courses-container">
+                <h2>Courses & Resources</h2>
+                <div class="courses-grid">
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Analytical Chemistry Course">
+                        </div>
+                        <div class="course-content">
+                            <h3>Analytical Chemistry</h3>
+                            <p>Learn advanced techniques in chemical analysis and laboratory methods.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8 weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> Beginner</span>
+                            </div>
+                            <a href="#" class="course-btn">Learn More</a>
+                        </div>
                     </div>
-                    <div class="about-text">
-                        <h3>Our Mission</h3>
-                        <p>Chemistry Center at Ho Chi Minh City University of Science (HCMUS) is dedicated to advancing research in chemistry and environmental sciences. We focus on developing innovative solutions for water quality and environmental protection.</p>
-                        
-                        <h3>Our Vision</h3>
-                        <p>To be a leading research center in Southeast Asia for chemistry and environmental sciences, contributing to sustainable development and environmental protection.</p>
-                        
-                        <h3>Core Values</h3>
-                        <ul class="core-values">
-                            <li><i class="fas fa-flask"></i> Excellence in Research</li>
-                            <li><i class="fas fa-leaf"></i> Environmental Stewardship</li>
-                            <li><i class="fas fa-handshake"></i> Collaboration</li>
-                            <li><i class="fas fa-graduation-cap"></i> Education & Training</li>
-                        </ul>
+
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Environmental Chemistry Course">
+                        </div>
+                        <div class="course-content">
+                            <h3>Environmental Chemistry</h3>
+                            <p>Study the impact of chemicals on the environment and sustainable solutions.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 10 weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> Intermediate</span>
+                            </div>
+                            <a href="#" class="course-btn">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Water Treatment Course">
+                        </div>
+                        <div class="course-content">
+                            <h3>Water Treatment</h3>
+                            <p>Master the principles and practices of water purification and treatment.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 12 weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> Advanced</span>
+                            </div>
+                            <a href="#" class="course-btn">Learn More</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="about-features">
-                    <div class="feature-card">
-                        <i class="fas fa-microscope"></i>
-                        <h3>State-of-the-art Facilities</h3>
-                        <p>Modern laboratories equipped with advanced analytical instruments</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-users"></i>
-                        <h3>Expert Team</h3>
-                        <p>Dedicated researchers and scientists with diverse expertise</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-globe"></i>
-                        <h3>Global Collaboration</h3>
-                        <p>Partnerships with leading institutions worldwide</p>
+                <div class="resources-section">
+                    <h3>Learning Resources</h3>
+                    <div class="resources-grid">
+                        <div class="resource-card">
+                            <i class="fas fa-book"></i>
+                            <h4>Textbooks</h4>
+                            <p>Access our recommended textbooks and study materials.</p>
+                            <a href="#" class="resource-link">View Resources</a>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-video"></i>
+                            <h4>Video Lectures</h4>
+                            <p>Watch recorded lectures from our expert instructors.</p>
+                            <a href="#" class="resource-link">Watch Videos</a>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-flask"></i>
+                            <h4>Lab Manuals</h4>
+                            <p>Download detailed laboratory manuals and protocols.</p>
+                            <a href="#" class="resource-link">Download</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,6 +119,7 @@
                     <li><a href="team.html">Team</a></li>
                     <li><a href="research.html">Research</a></li>
                     <li><a href="publications.html">Publications</a></li>
+                    <li><a href="courses.html">Courses & Resources</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
