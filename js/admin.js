@@ -1,6 +1,32 @@
 // Admin Authentication
 let currentUser = null;
 
+// Data cache
+const dataCache = {
+    courses: null,
+    resources: null,
+    publications: null
+};
+
+// Loading state
+let isLoading = false;
+
+// Loading indicator
+function showLoading(show = true) {
+    let loadingEl = document.querySelector('.loading-indicator');
+    if (!loadingEl && show) {
+        loadingEl = document.createElement('div');
+        loadingEl.className = 'loading-indicator';
+        loadingEl.innerHTML = `
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading data...</div>
+        `;
+        document.body.appendChild(loadingEl);
+    } else if (loadingEl && !show) {
+        loadingEl.remove();
+    }
+}
+
 // Sample user data
 const SAMPLE_USERS = [
     {
@@ -15,107 +41,12 @@ const SHEET_ID = '11qHP1J0WlSyEZ3AD5jqKRs7oaCafkrUAHFVdJ-E_BeY';
 const SHEET_NAMES = {
     courses: 'Courses',
     resources: 'Resources',
-    publications: 'Publications'
+    publications: 'Publications',
+    team: 'ResearchTeam'
 };
 
 // Google Apps Script Web App URL
-// TODO: Replace this URL with your deployed Google Apps Script Web App URL
-// To get this URL:
-// 1. Open your Google Sheet
-// 2. Go to Tools > Script editor
-// 3. Copy the provided Apps Script code
-// 4. Click Deploy > New deployment
-// 5. Choose "Web app"
-// 6. Set "Execute as" to "Me" and "Who has access" to "Anyone"
-// 7. Click Deploy and copy the URL
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz...'; // Replace with your actual URL
-
-// OAuth2 Configuration
-const CLIENT_ID = 'YOUR_CLIENT_ID';
-const API_KEY = 'YOUR_API_KEY';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
-
-let accessToken = null;
-
-// Function to initialize Google Sheets API
-async function initGoogleSheets() {
-    try {
-        // Load the Google API client library
-        await loadGoogleAPI();
-        
-        // Initialize the client
-        await gapi.client.init({
-            apiKey: API_KEY,
-            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-        });
-        
-        // Load the auth2 library
-        await gapi.load('auth2', async function() {
-            await gapi.auth2.init({
-                client_id: CLIENT_ID,
-                scope: SCOPES
-            });
-            
-            // Listen for sign-in state changes
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            
-            // Handle the initial sign-in state
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        });
-    } catch (error) {
-        console.error('Error initializing Google Sheets:', error);
-        showNotification('Failed to initialize Google Sheets', 'error');
-    }
-}
-
-// Function to load Google API client library
-function loadGoogleAPI() {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://apis.google.com/js/api.js';
-        script.onload = async () => {
-            try {
-                await gapi.load('client:auth2');
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        };
-        script.onerror = reject;
-        document.body.appendChild(script);
-    });
-}
-
-// Function to update sign-in status
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-        showNotification('Successfully connected to Google Sheets', 'success');
-    } else {
-        accessToken = null;
-        showNotification('Please sign in to use Google Sheets', 'info');
-    }
-}
-
-// Function to sign in to Google
-async function signInToGoogle() {
-    try {
-        await gapi.auth2.getAuthInstance().signIn();
-    } catch (error) {
-        console.error('Error signing in to Google:', error);
-        showNotification('Failed to sign in to Google', 'error');
-    }
-}
-
-// Function to sign out from Google
-async function signOutFromGoogle() {
-    try {
-        await gapi.auth2.getAuthInstance().signOut();
-    } catch (error) {
-        console.error('Error signing out from Google:', error);
-        showNotification('Failed to sign out from Google', 'error');
-    }
-}
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz6eM_q6qCcU02Za5YRUyAclXILJKwVvABAua0JF2OGcc-cGR_38O7C4uwep_xdsUBTfQ/exec';
 
 // Check if user is logged in
 function checkAuth() {
@@ -164,15 +95,11 @@ function handleLogout() {
 
 // Dashboard Navigation
 function showSection(sectionId) {
-    console.log('Showing section:', sectionId); // Debug log
+    console.log('Showing section:', sectionId);
 
     // Hide all sections
     const sections = document.querySelectorAll('.admin-section');
-    if (sections) {
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-    }
+    sections?.forEach(section => section.classList.remove('active'));
 
     // Show selected section
     const selectedSection = document.getElementById(sectionId);
@@ -180,169 +107,226 @@ function showSection(sectionId) {
         selectedSection.classList.add('active');
     } else {
         console.error('Section not found:', sectionId);
+        return;
     }
 
     // Update active nav item
     const navItems = document.querySelectorAll('.sidebar-nav li');
-    if (navItems) {
-        navItems.forEach(item => {
-            item.classList.remove('active');
-        });
-        const activeItem = document.querySelector(`[data-section="${sectionId}"]`);
-        if (activeItem) {
-            activeItem.classList.add('active');
-        }
-    }
+    navItems?.forEach(item => item.classList.remove('active'));
+    const activeItem = document.querySelector(`[data-section="${sectionId}"]`);
+    activeItem?.classList.add('active');
 
     // Load section data
     loadSectionData(sectionId);
 }
 
 // Load section data
-function loadSectionData(sectionId) {
+async function loadSectionData(sectionId) {
     console.log('Loading section data:', sectionId);
-    switch(sectionId) {
-        case 'courses':
-            loadCourses();
-            break;
-        case 'resources':
-            loadResources();
-            break;
-        case 'contact':
-            loadContactInfo();
-            break;
-        case 'publications':
-            loadPublications();
-            break;
+    
+    // Show loading indicator if data is not cached
+    if (!dataCache[sectionId]) {
+        showLoading(true);
+    }
+    
+    try {
+        switch(sectionId) {
+            case 'courses':
+                await loadCourses();
+                break;
+            case 'resources':
+                await loadResources();
+                break;
+            case 'contact':
+                await loadContactInfo();
+                break;
+            case 'publications':
+                await loadPublications();
+                break;
+            case 'team':
+                await loadTeamMembers();
+                break;
+        }
+    } catch (error) {
+        console.error('Error loading section data:', error);
+        showNotification(`Error loading ${sectionId}: ${error.message}`, 'error');
+    } finally {
+        showLoading(false);
     }
 }
 
-// Function to load data from Google Sheets
+// Load data from Google Sheets
 async function loadFromGoogleSheets(sheetName) {
     try {
+        // Return cached data if available
+        if (dataCache[sheetName.toLowerCase()]) {
+            console.log(`Using cached data for sheet: ${sheetName}`);
+            return dataCache[sheetName.toLowerCase()];
+        }
+
+        console.log(`Loading data for sheet: ${sheetName}`);
+        
         const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+        console.log('Fetching URL:', url);
+        
         const response = await fetch(url);
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const text = await response.text();
+        
         // Remove the prefix "google.visualization.Query.setResponse(" and suffix ");"
         const jsonString = text.substring(47).slice(0, -2);
         const data = JSON.parse(jsonString);
         
-        // Convert Google Sheets data to our format
+        if (!data.table || !data.table.cols || !data.table.rows) {
+            console.error('Invalid data structure:', data);
+            throw new Error('Invalid data structure from Google Sheets');
+        }
+
         const headers = data.table.cols.map(col => col.label);
+        
+        // Convert Google Sheets data to our format
         const rows = data.table.rows.map(row => {
             const obj = {};
             row.c.forEach((cell, index) => {
-                obj[headers[index]] = cell ? cell.v : null;
+                const header = headers[index].toLowerCase();
+                const value = cell ? cell.v : null;
+                
+                // Convert boolean strings to actual booleans
+                if (typeof value === 'string' && (value.toUpperCase() === 'TRUE' || value.toUpperCase() === 'FALSE')) {
+                    obj[header] = value.toUpperCase() === 'TRUE';
+                } else {
+                    obj[header] = value;
+                }
             });
             return obj;
         });
         
+        // Cache the data
+        dataCache[sheetName.toLowerCase()] = rows;
+        
         return rows;
     } catch (error) {
         console.error('Error loading data from Google Sheets:', error);
+        showNotification(`Error loading ${sheetName}: ${error.message}`, 'error');
         return null;
     }
 }
 
-// Function to update data in Google Sheets
+// Update data in Google Sheets
 async function updateGoogleSheet(sheetName, action, data) {
     try {
+        console.log('Updating Google Sheet with:', {
+            sheetName,
+            action,
+            data
+        });
+
         const response = await fetch(WEB_APP_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sheetName: sheetName,
                 action: action,
+                sheet: sheetName,
                 data: data
             })
         });
         
+        console.log('Response status:', response.status);
+        
         if (!response.ok) {
-            throw new Error('Failed to update Google Sheet');
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const result = await response.json();
+        console.log('Response data:', result);
+        
         if (result.status === 'success') {
             return result;
         } else {
-            throw new Error(result.message || 'Failed to update Google Sheet');
+            throw new Error(result.message || 'Failed to update data');
         }
     } catch (error) {
-        console.error('Error updating Google Sheet:', error);
+        console.error('Error updating data:', error);
         throw error;
     }
 }
 
-// Courses Management
-async function loadCourses() {
+// Check Google Apps Script connection
+async function checkGoogleAppsScriptConnection() {
     try {
-        const data = await loadFromGoogleSheets(SHEET_NAMES.courses);
-        if (!data) {
-            throw new Error('Failed to load courses data');
-        }
+        console.log('Checking Google Apps Script connection...');
+        const url = `${WEB_APP_URL}?t=${Date.now()}`;
         
-        const coursesTable = document.getElementById('coursesTableBody');
-        if (!coursesTable) {
-            console.error('Courses table body not found');
-            return;
-        }
-        
-        coursesTable.innerHTML = data.map(course => createCourseRow(course)).join('');
-    } catch (error) {
-        console.error('Error loading courses:', error);
-        showNotification('Failed to load courses', 'error');
-    }
-}
-
-// Resources Management
-async function loadResources() {
-    try {
-        const data = await loadFromGoogleSheets(SHEET_NAMES.resources);
-        if (!data) {
-            throw new Error('Failed to load resources data');
-        }
-        
-        const resourcesTable = document.getElementById('resourcesTableBody');
-        if (!resourcesTable) {
-            console.error('Resources table body not found');
-            return;
-        }
-        
-        resourcesTable.innerHTML = data.map(resource => createResourceRow(resource)).join('');
-    } catch (error) {
-        console.error('Error loading resources:', error);
-        showNotification('Failed to load resources', 'error');
-    }
-}
-
-// Contact Info Management
-function loadContactInfo() {
-    fetch('../data/contact.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Loaded contact info:', data);
-            const form = document.getElementById('contactInfoForm');
-            if (!form) {
-                console.error('Contact form not found');
-                return;
-            }
-            form.querySelector('[name="street"]').value = data.address;
-            form.querySelector('[name="mainPhone"]').value = data.phone;
-            form.querySelector('[name="mainEmail"]').value = data.email;
-        })
-        .catch(error => {
-            console.error('Error loading contact info:', error);
         });
+        
+        console.log('Connection check response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Connection check result:', result);
+        
+        return result.status === 'success';
+    } catch (error) {
+        console.error('Error checking Google Apps Script connection:', error);
+        return false;
+    }
 }
 
-// Function to create course row
+// Validate sheet data
+function validateSheetData(data, sheetName) {
+    console.log(`Validating data for sheet: ${sheetName}`);
+    console.log('Data to validate:', data);
+
+    if (!data || !Array.isArray(data)) {
+        console.error('Invalid data structure:', data);
+        throw new Error(`Invalid data structure for ${sheetName}`);
+    }
+
+    const requiredFields = {
+        courses: ['id', 'title', 'duration', 'price', 'description', 'instructor', 'level', 'category', 'isshow'],
+        resources: ['id', 'title', 'description', 'link', 'isshow'],
+        publications: ['id', 'title', 'journal', 'authors', 'excerpt', 'details', 'pdffile', 'year', 'doi']
+    };
+
+    const fields = requiredFields[sheetName.toLowerCase()];
+    if (!fields) {
+        console.error('Unknown sheet name:', sheetName);
+        throw new Error(`Unknown sheet name: ${sheetName}`);
+    }
+
+    console.log('Required fields:', fields);
+
+    data.forEach((row, index) => {
+        console.log(`Validating row ${index + 1}:`, row);
+        fields.forEach(field => {
+            if (row[field] === undefined || row[field] === null) {
+                console.error(`Missing or null field "${field}" in row ${index + 1}:`, row);
+                throw new Error(`Missing or null field "${field}" in row ${index + 1} of ${sheetName}`);
+            }
+        });
+    });
+
+    return true;
+}
+
+// Create course row HTML
 function createCourseRow(course) {
     return `
         <tr data-id="${course.id}">
@@ -354,7 +338,7 @@ function createCourseRow(course) {
             <td>${course.instructor}</td>
             <td>
                 <div class="toggle-switch">
-                    <input type="checkbox" id="course-show-${course.id}" ${course.isShow ? 'checked' : ''}>
+                    <input type="checkbox" id="course-show-${course.id}" ${course.isshow ? 'checked' : ''}>
                     <label for="course-show-${course.id}"></label>
                 </div>
             </td>
@@ -370,434 +354,590 @@ function createCourseRow(course) {
     `;
 }
 
-// Function to create resource row
-function createResourceRow(resource) {
-    return `
-        <tr data-id="${resource.id}">
-            <td>${resource.id}</td>
-            <td>${resource.title}</td>
-            <td>${resource.description}</td>
-            <td>
-                <div class="toggle-switch">
-                    <input type="checkbox" id="resource-show-${resource.id}" ${resource.isShow ? 'checked' : ''}>
-                    <label for="resource-show-${resource.id}"></label>
-                </div>
-            </td>
-            <td>
-                <button class="edit-btn" onclick="editResource(${resource.id})">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="delete-btn" onclick="deleteResource(${resource.id})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        </tr>
-    `;
-}
-
-// Function to handle course show toggle
-function handleCourseShowToggle(courseId, isShow) {
-    // Get current data from localStorage or fetch from JSON file
-    fetch('../data/courses.json')
-        .then(response => response.json())
-        .then(data => {
-            // Find and update the course
-            data.categories.forEach(category => {
-                category.courses.forEach(course => {
-                    if (course.id === courseId) {
-                        course.isShow = isShow;
-                    }
-                });
-            });
-
-            // Store updated data in localStorage
-            localStorage.setItem('coursesData', JSON.stringify(data));
-            
-            // Show success notification
-            showNotification('Course visibility updated successfully', 'success');
-            
-            // Reload the courses table to reflect changes
-            loadCourses();
-        })
-        .catch(error => {
-            console.error('Error updating course visibility:', error);
-            showNotification('Failed to update course visibility', 'error');
-        });
-}
-
-// Function to handle resource show toggle
-function handleResourceShowToggle(resourceId, isShow) {
-    // Get current data from localStorage or fetch from JSON file
-    fetch('../data/courses.json')
-        .then(response => response.json())
-        .then(data => {
-            // Find and update the resource
-            data.resources.forEach(resource => {
-                if (resource.id === resourceId) {
-                    resource.isShow = isShow;
-                }
-            });
-
-            // Store updated data in localStorage
-            localStorage.setItem('coursesData', JSON.stringify(data));
-            
-            // Show success notification
-            showNotification('Resource visibility updated successfully', 'success');
-            
-            // Reload the resources table to reflect changes
-            loadResources();
-        })
-        .catch(error => {
-            console.error('Error updating resource visibility:', error);
-            showNotification('Failed to update resource visibility', 'error');
-        });
-}
-
-// Function to show notification
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-
-    // Remove notification after 3 seconds
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-// Add event listeners for show toggles
-document.addEventListener('DOMContentLoaded', () => {
-    // Course show toggle listeners
-    document.addEventListener('change', (e) => {
-        if (e.target.matches('input[id^="course-show-"]')) {
-            const courseId = parseInt(e.target.id.split('-')[2]);
-            handleCourseShowToggle(courseId, e.target.checked);
-        }
-    });
-
-    // Resource show toggle listeners
-    document.addEventListener('change', (e) => {
-        if (e.target.matches('input[id^="resource-show-"]')) {
-            const resourceId = parseInt(e.target.id.split('-')[2]);
-            handleResourceShowToggle(resourceId, e.target.checked);
-        }
-    });
-});
-
-// Course Management Functions
-function addCourse() {
-    showModal('Add New Course');
-    const modalForm = document.getElementById('modalForm');
-    modalForm.innerHTML = `
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" name="title" required>
-        </div>
-        <div class="form-group">
-            <label>Category</label>
-            <select name="category" required>
-                <option value="">Select Category</option>
-                <option value="Research Methods">Research Methods</option>
-                <option value="Data Analysis">Data Analysis</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Duration</label>
-            <input type="text" name="duration" required>
-        </div>
-        <div class="form-group">
-            <label>Price</label>
-            <input type="text" name="price" required>
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea name="description" required></textarea>
-        </div>
-        <div class="form-group">
-            <label>Instructor</label>
-            <input type="text" name="instructor" required>
-        </div>
-        <div class="form-group">
-            <label>Level</label>
-            <select name="level" required>
-                <option value="">Select Level</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-            </select>
-        </div>
-        <button type="submit" class="btn-primary">Save Course</button>
-    `;
-    modalForm.onsubmit = handleCourseSubmit;
-}
-
-// Function to edit course
-async function editCourse(courseId) {
+// Load courses
+async function loadCourses() {
     try {
         const data = await loadFromGoogleSheets(SHEET_NAMES.courses);
-        const course = data.find(c => c.id === courseId);
-        
-        if (course) {
-            showModal('Edit Course');
-            const modalForm = document.getElementById('modalForm');
-            modalForm.innerHTML = `
-                <input type="hidden" name="id" value="${course.id}">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" name="title" value="${course.title}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select name="category" required>
-                            <option value="">Select Category</option>
-                            <option value="Research Methods" ${course.category === 'Research Methods' ? 'selected' : ''}>Research Methods</option>
-                            <option value="Data Analysis" ${course.category === 'Data Analysis' ? 'selected' : ''}>Data Analysis</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Duration</label>
-                        <input type="text" name="duration" value="${course.duration}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="text" name="price" value="${course.price}" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" required>${course.description}</textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Instructor</label>
-                        <input type="text" name="instructor" value="${course.instructor}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Level</label>
-                        <select name="level" required>
-                            <option value="">Select Level</option>
-                            <option value="Beginner" ${course.level === 'Beginner' ? 'selected' : ''}>Beginner</option>
-                            <option value="Intermediate" ${course.level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
-                            <option value="Advanced" ${course.level === 'Advanced' ? 'selected' : ''}>Advanced</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group toggle-group">
-                    <label>Show Course</label>
-                    <div class="toggle-switch">
-                        <input type="checkbox" name="isShow" id="course-show-edit-${course.id}" ${course.isShow ? 'checked' : ''}>
-                        <label for="course-show-edit-${course.id}"></label>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Update Course</button>
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                </div>
-            `;
-            modalForm.onsubmit = handleCourseSubmit;
-        } else {
-            showNotification('Course not found', 'error');
+        if (!data) {
+            throw new Error('Failed to load courses data');
         }
+
+        validateSheetData(data, SHEET_NAMES.courses);
+        
+        const coursesTable = document.getElementById('coursesTableBody');
+        if (!coursesTable) {
+            console.error('Courses table body not found');
+            return;
+        }
+        
+        coursesTable.innerHTML = data.map(course => createCourseRow(course)).join('');
     } catch (error) {
-        console.error('Error loading course data:', error);
-        showNotification('Error loading course data: ' + error.message, 'error');
+        console.error('Error loading courses:', error);
+        showNotification('Failed to load courses: ' + error.message, 'error');
     }
 }
 
-// Function to delete course
-async function deleteCourse(courseId) {
-    if (confirm('Are you sure you want to delete this course?')) {
-        try {
-            await updateGoogleSheet(SHEET_NAMES.courses, 'delete', { id: courseId });
-            showNotification('Course deleted successfully', 'success');
-            loadCourses();
-        } catch (error) {
-            console.error('Error deleting course:', error);
-            showNotification('Error deleting course: ' + error.message, 'error');
-        }
-    }
-}
-
-// Function to update JSON file
-async function updateJsonFile(filePath, data) {
-    try {
-        const filename = filePath.split('/').pop();
-        const response = await fetch(`http://localhost:3000/api/data/${filename}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to update JSON file');
-        }
-        
-        return true;
-    } catch (error) {
-        console.error('Error updating JSON file:', error);
-        return false;
-    }
-}
-
-// Function to load JSON file
-async function loadJsonFile(filePath) {
-    try {
-        const filename = filePath.split('/').pop();
-        const response = await fetch(`http://localhost:3000/api/data/${filename}`);
-        
-        if (!response.ok) {
-            throw new Error('Failed to load JSON file');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error loading JSON file:', error);
-        return null;
-    }
-}
-
-// Function to handle course submit
+// Handle course submit
 async function handleCourseSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const courseData = Object.fromEntries(formData.entries());
     
     try {
+        console.log('Submitting course data:', courseData);
+        
         // Convert checkbox value to boolean
-        courseData.isShow = courseData.isShow === 'on';
+        courseData.isshow = courseData.isshow === 'on';
+        
+        // Ensure all required fields are present
+        const requiredFields = ['title', 'duration', 'price', 'description', 'instructor', 'level', 'category'];
+        for (const field of requiredFields) {
+            if (!courseData[field]) {
+                throw new Error(`Missing required field: ${field}`);
+            }
+        }
         
         // Determine if this is an update or insert
         const action = courseData.id ? 'update' : 'insert';
         
+        // If inserting, generate a new ID
+        if (action === 'insert') {
+            const timestamp = new Date().getTime();
+            courseData.id = `COURSE_${timestamp}`;
+        }
+        
         // Update Google Sheet
-        await updateGoogleSheet(SHEET_NAMES.courses, action, courseData);
+        const result = await updateGoogleSheet(SHEET_NAMES.courses, action, courseData);
+        console.log('Update result:', result);
         
         showNotification('Course saved successfully', 'success');
         closeModal();
         loadCourses();
     } catch (error) {
         console.error('Error saving course:', error);
-        showNotification('Error saving course: ' + error.message, 'error');
+        showNotification(`Error saving course: ${error.message}`, 'error');
     }
 }
 
-// Resource Management Functions
-function addResource() {
-    showModal('Add New Resource');
-    const modalForm = document.getElementById('modalForm');
-    modalForm.innerHTML = `
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" name="title" required>
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea name="description" required></textarea>
-        </div>
-        <div class="form-group">
-            <label>Link</label>
-            <input type="url" name="link" required>
-        </div>
-        <button type="submit" class="btn-primary">Save Resource</button>
-    `;
-    modalForm.onsubmit = handleResourceSubmit;
+// Show notification
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
-function editResource(resourceId) {
-    showModal('Edit Resource');
-    fetch('../data/courses.json')
-        .then(response => response.json())
-        .then(data => {
-            const resource = data.resources.find(r => r.id === resourceId);
-            if (resource) {
-                const modalForm = document.getElementById('modalForm');
-                modalForm.innerHTML = `
-                    <input type="hidden" name="id" value="${resource.id}">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" name="title" value="${resource.title}" required>
+// Load resources
+async function loadResources() {
+    try {
+        const resources = await loadFromGoogleSheets(SHEET_NAMES.resources);
+        if (!resources) return;
+
+        const resourcesTable = document.getElementById('resourcesTableBody');
+        if (!resourcesTable) {
+            console.error('Resources table body not found');
+            return;
+        }
+
+        resourcesTable.innerHTML = resources.map(resource => `
+            <tr data-id="${resource.id}">
+                <td>${resource.id}</td>
+                <td>${resource.title}</td>
+                <td>${resource.description}</td>
+                <td>
+                    <a href="${resource.link}" target="_blank" rel="noopener noreferrer">
+                        ${resource.link}
+                    </a>
+                </td>
+                <td>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="resource-show-${resource.id}" ${resource.isshow ? 'checked' : ''}>
+                        <label for="resource-show-${resource.id}"></label>
                     </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="description" required>${resource.description}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Link</label>
-                        <input type="url" name="link" value="${resource.link}" required>
-                    </div>
-                    <div class="form-group toggle-group">
-                        <label>Show Resource</label>
-                        <div class="toggle-switch">
-                            <input type="checkbox" name="isShow" id="resource-show-edit-${resource.id}" ${resource.isShow ? 'checked' : ''}>
-                            <label for="resource-show-edit-${resource.id}"></label>
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">Update Resource</button>
-                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                `;
-                modalForm.onsubmit = handleResourceSubmit;
+                </td>
+                <td>
+                    <button class="edit-btn" onclick="editResource(${resource.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="deleteResource(${resource.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+        // Add event listeners for toggle switches
+        resources.forEach(resource => {
+            const toggle = document.getElementById(`resource-show-${resource.id}`);
+            if (toggle) {
+                toggle.addEventListener('change', async (e) => {
+                    try {
+                        await updateGoogleSheet(SHEET_NAMES.resources, 'update', {
+                            ...resource,
+                            isshow: e.target.checked
+                        });
+                        showNotification('Resource visibility updated', 'success');
+                    } catch (error) {
+                        console.error('Error updating resource visibility:', error);
+                        e.target.checked = !e.target.checked; // Revert the toggle
+                        showNotification('Failed to update resource visibility', 'error');
+                    }
+                });
             }
         });
-}
-
-function deleteResource(resourceId) {
-    if (confirm('Are you sure you want to delete this resource?')) {
-        // In a real application, you would make an API call here
-        console.log('Deleting resource:', resourceId);
-        alert('Resource deleted successfully!');
-        loadResources(); // Reload the resources table
-    }
-}
-
-// Function to handle resource submit
-async function handleResourceSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const resourceData = Object.fromEntries(formData.entries());
-    
-    try {
-        // For now, we'll just show a success message
-        showNotification('Resource saved successfully', 'success');
-        closeModal();
-        loadResources();
     } catch (error) {
-        console.error('Error saving resource:', error);
-        showNotification('Error saving resource', 'error');
+        console.error('Error in loadResources:', error);
+        throw error;
     }
 }
 
-// Modal Functions
-function showModal(title) {
+// Load publications
+async function loadPublications() {
+    try {
+        const publications = await loadFromGoogleSheets(SHEET_NAMES.publications);
+        if (!publications) return;
+
+        const publicationsTable = document.getElementById('publicationsTableBody');
+        if (!publicationsTable) {
+            console.error('Publications table body not found');
+            return;
+        }
+
+        publicationsTable.innerHTML = publications.map(pub => `
+            <tr data-id="${pub.id}">
+                <td>${pub.id}</td>
+                <td>${pub.title}</td>
+                <td>${pub.journal}</td>
+                <td>${pub.authors}</td>
+                <td>${pub.year}</td>
+                <td>
+                    <a href="${pub.doi}" target="_blank" rel="noopener noreferrer">
+                        ${pub.doi}
+                    </a>
+                </td>
+                <td>
+                    <button class="edit-btn" onclick="editPublication(${pub.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="deletePublication(${pub.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    ${pub.pdffile ? `
+                        <a href="${pub.pdffile}" target="_blank" rel="noopener noreferrer" class="btn-view">
+                            <i class="fas fa-file-pdf"></i>
+                        </a>
+                    ` : ''}
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error('Error in loadPublications:', error);
+        throw error;
+    }
+}
+
+// Load team members
+async function loadTeamMembers() {
+    try {
+        const team = await loadFromGoogleSheets(SHEET_NAMES.team);
+        if (!team) return;
+
+        const teamTable = document.getElementById('teamTableBody');
+        if (!teamTable) {
+            console.error('Team table body not found');
+            return;
+        }
+
+        teamTable.innerHTML = team.map(member => `
+            <tr data-id="${member.id}">
+                <td>${member.id}</td>
+                <td>${member.name}</td>
+                <td>${member.role}</td>
+                <td>${member.bio}</td>
+                <td>
+                    <img src="${member.image}" alt="${member.name}" style="width: 50px; height: 50px; object-fit: cover;">
+                </td>
+                <td>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="member-show-${member.id}" ${member.isshow ? 'checked' : ''}>
+                        <label for="member-show-${member.id}"></label>
+                    </div>
+                </td>
+                <td>
+                    <button class="edit-btn" onclick="editTeamMember(${member.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="deleteTeamMember(${member.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+        // Add event listeners for toggle switches
+        team.forEach(member => {
+            const toggle = document.getElementById(`member-show-${member.id}`);
+            if (toggle) {
+                toggle.addEventListener('change', async (e) => {
+                    try {
+                        await updateGoogleSheet(SHEET_NAMES.team, 'update', {
+                            ...member,
+                            isshow: e.target.checked
+                        });
+                        showNotification('Team member visibility updated', 'success');
+                    } catch (error) {
+                        console.error('Error updating team member visibility:', error);
+                        e.target.checked = !e.target.checked; // Revert the toggle
+                        showNotification('Failed to update team member visibility', 'error');
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error in loadTeamMembers:', error);
+        throw error;
+    }
+}
+
+// Add team member
+async function addTeamMember() {
+    const modalForm = document.getElementById('modalForm');
+    if (!modalForm) return;
+
+    document.getElementById('modal-title').textContent = 'Add New Team Member';
+    modalForm.innerHTML = `
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <input type="text" id="role" name="role" required>
+        </div>
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="url" id="image" name="image" required>
+        </div>
+        <div class="form-group">
+            <label for="isshow">Show on website</label>
+            <input type="checkbox" id="isshow" name="isshow" checked>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Team Member</button>
+            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    `;
+
+    modalForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const memberData = {
+            id: `TEAM_${Date.now()}`,
+            name: formData.get('name'),
+            role: formData.get('role'),
+            bio: formData.get('bio'),
+            image: formData.get('image'),
+            isshow: formData.get('isshow') === 'on'
+        };
+
+        try {
+            await updateGoogleSheet(SHEET_NAMES.team, 'insert', memberData);
+            showNotification('Team member added successfully', 'success');
+            closeModal();
+            loadTeamMembers();
+        } catch (error) {
+            console.error('Error adding team member:', error);
+            showNotification('Failed to add team member', 'error');
+        }
+    };
+
+    openModal();
+}
+
+// Edit team member
+async function editTeamMember(id) {
+    try {
+        const team = await loadFromGoogleSheets(SHEET_NAMES.team);
+        const member = team.find(m => m.id === id);
+        if (!member) {
+            throw new Error('Team member not found');
+        }
+
+        const modalForm = document.getElementById('modalForm');
+        if (!modalForm) return;
+
+        document.getElementById('modal-title').textContent = 'Edit Team Member';
+        modalForm.innerHTML = `
+            <input type="hidden" name="id" value="${member.id}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="${member.name}" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <input type="text" id="role" name="role" value="${member.role}" required>
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" required>${member.bio}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Image URL</label>
+                <input type="url" id="image" name="image" value="${member.image}" required>
+            </div>
+            <div class="form-group">
+                <label for="isshow">Show on website</label>
+                <input type="checkbox" id="isshow" name="isshow" ${member.isshow ? 'checked' : ''}>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Update Team Member</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        `;
+
+        modalForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const updatedData = {
+                id: member.id,
+                name: formData.get('name'),
+                role: formData.get('role'),
+                bio: formData.get('bio'),
+                image: formData.get('image'),
+                isshow: formData.get('isshow') === 'on'
+            };
+
+            try {
+                await updateGoogleSheet(SHEET_NAMES.team, 'update', updatedData);
+                showNotification('Team member updated successfully', 'success');
+                closeModal();
+                loadTeamMembers();
+            } catch (error) {
+                console.error('Error updating team member:', error);
+                showNotification('Failed to update team member', 'error');
+            }
+        };
+
+        openModal();
+    } catch (error) {
+        console.error('Error in editTeamMember:', error);
+        showNotification('Failed to load team member data', 'error');
+    }
+}
+
+// Delete team member
+async function deleteTeamMember(id) {
+    if (confirm('Are you sure you want to delete this team member?')) {
+        try {
+            await updateGoogleSheet(SHEET_NAMES.team, 'delete', { id });
+            showNotification('Team member deleted successfully', 'success');
+            loadTeamMembers();
+        } catch (error) {
+            console.error('Error deleting team member:', error);
+            showNotification('Failed to delete team member', 'error');
+        }
+    }
+}
+
+// Add resource
+async function addResource() {
+    const modalForm = document.getElementById('modalForm');
+    if (!modalForm) return;
+
+    document.getElementById('modal-title').textContent = 'Add New Resource';
+    modalForm.innerHTML = `
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="link">Link</label>
+            <input type="url" id="link" name="link" required>
+        </div>
+        <div class="form-group">
+            <label for="isshow">Show on website</label>
+            <input type="checkbox" id="isshow" name="isshow" checked>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Resource</button>
+            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    `;
+
+    modalForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const resourceData = {
+            id: `RESOURCE_${Date.now()}`,
+            title: formData.get('title'),
+            description: formData.get('description'),
+            link: formData.get('link'),
+            isshow: formData.get('isshow') === 'on'
+        };
+
+        try {
+            await updateGoogleSheet(SHEET_NAMES.resources, 'insert', resourceData);
+            showNotification('Resource added successfully', 'success');
+            closeModal();
+            loadResources();
+        } catch (error) {
+            console.error('Error adding resource:', error);
+            showNotification('Failed to add resource', 'error');
+        }
+    };
+
+    openModal();
+}
+
+// Add publication
+async function addPublication() {
+    const modalForm = document.getElementById('modalForm');
+    if (!modalForm) return;
+
+    document.getElementById('modal-title').textContent = 'Add New Publication';
+    modalForm.innerHTML = `
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="journal">Journal</label>
+            <input type="text" id="journal" name="journal" required>
+        </div>
+        <div class="form-group">
+            <label for="authors">Authors</label>
+            <input type="text" id="authors" name="authors" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" required min="1900" max="2100">
+        </div>
+        <div class="form-group">
+            <label for="doi">DOI</label>
+            <input type="url" id="doi" name="doi" required>
+        </div>
+        <div class="form-group">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="details">Details</label>
+            <textarea id="details" name="details" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="pdffile">PDF File URL (optional)</label>
+            <input type="url" id="pdffile" name="pdffile">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Publication</button>
+            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    `;
+
+    modalForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const publicationData = {
+            id: `PUB_${Date.now()}`,
+            title: formData.get('title'),
+            journal: formData.get('journal'),
+            authors: formData.get('authors'),
+            year: formData.get('year'),
+            doi: formData.get('doi'),
+            excerpt: formData.get('excerpt'),
+            details: formData.get('details'),
+            pdffile: formData.get('pdffile') || null
+        };
+
+        try {
+            await updateGoogleSheet(SHEET_NAMES.publications, 'insert', publicationData);
+            showNotification('Publication added successfully', 'success');
+            closeModal();
+            loadPublications();
+        } catch (error) {
+            console.error('Error adding publication:', error);
+            showNotification('Failed to add publication', 'error');
+        }
+    };
+
+    openModal();
+}
+
+// Modal functions
+function openModal() {
     const modal = document.getElementById('item-modal');
-    const modalTitle = document.getElementById('modal-title');
-    modalTitle.textContent = title;
-    modal.style.display = 'block';
+    if (modal) {
+        modal.style.display = 'block';
+    }
 }
 
 function closeModal() {
     const modal = document.getElementById('item-modal');
-    modal.style.display = 'none';
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('item-modal');
-    if (event.target === modal) {
-        closeModal();
+    if (modal) {
+        modal.style.display = 'none';
     }
 }
 
 // Initialize dashboard
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded'); // Debug log
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM Content Loaded');
+    
+    // Add loading indicator styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Check Google Apps Script connection
+    const isConnected = await checkGoogleAppsScriptConnection();
+    if (!isConnected) {
+        showNotification('Warning: Cannot connect to Google Apps Script', 'warning');
+    }
     
     // Initialize login form if on login page
     const loginForm = document.getElementById('loginForm');
@@ -811,6 +951,22 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Dashboard found, initializing');
         checkAuth();
         
+        // Preload all data
+        showLoading(true);
+        try {
+            await Promise.all([
+                loadFromGoogleSheets(SHEET_NAMES.courses),
+                loadFromGoogleSheets(SHEET_NAMES.resources),
+                loadFromGoogleSheets(SHEET_NAMES.publications),
+                loadFromGoogleSheets(SHEET_NAMES.team)
+            ]);
+        } catch (error) {
+            console.error('Error preloading data:', error);
+            showNotification('Error preloading data. Some sections may not load properly.', 'error');
+        } finally {
+            showLoading(false);
+        }
+        
         // Show default section
         const defaultSection = 'courses';
         console.log('Showing default section:', defaultSection);
@@ -818,272 +974,36 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize navigation
         const navItems = document.querySelectorAll('.sidebar-nav li');
-        if (navItems) {
-            navItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const sectionId = item.getAttribute('data-section');
-                    if (sectionId) {
-                        showSection(sectionId);
-                    }
-                });
+        navItems?.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.getAttribute('data-section');
+                if (sectionId) {
+                    showSection(sectionId);
+                }
             });
-        }
+        });
 
         // Initialize logout button
         const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', handleLogout);
-        }
+        logoutBtn?.addEventListener('click', handleLogout);
 
         // Initialize Add New button
         const addNewBtn = document.getElementById('addNewBtn');
-        if (addNewBtn) {
-            addNewBtn.addEventListener('click', () => {
-                const activeSection = document.querySelector('.admin-section.active');
-                if (activeSection) {
-                    switch(activeSection.id) {
-                        case 'courses':
-                            addCourse();
-                            break;
-                        case 'resources':
-                            addResource();
-                            break;
-                    }
+        addNewBtn?.addEventListener('click', () => {
+            const activeSection = document.querySelector('.admin-section.active');
+            if (activeSection) {
+                switch(activeSection.id) {
+                    case 'courses':
+                        addCourse();
+                        break;
+                    case 'resources':
+                        addResource();
+                        break;
+                    case 'team':
+                        addTeamMember();
+                        break;
                 }
-            });
-        }
-
-        // Initialize Add Category button
-        const addCategoryBtn = document.getElementById('addCategoryBtn');
-        if (addCategoryBtn) {
-            addCategoryBtn.addEventListener('click', () => {
-                showModal('Add New Category');
-                const modalForm = document.getElementById('modalForm');
-                modalForm.innerHTML = `
-                    <div class="form-group">
-                        <label>Category Name</label>
-                        <input type="text" name="name" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Save Category</button>
-                `;
-                modalForm.onsubmit = (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.target);
-                    const categoryData = Object.fromEntries(formData.entries());
-                    console.log('Saving category:', categoryData);
-                    alert('Category added successfully!');
-                    closeModal();
-                    loadCourses();
-                };
-            });
-        }
-    }
-
-    // Initialize Google Sheets
-    initGoogleSheets();
-    
-    // Add sign-in button to the header
-    const adminActions = document.querySelector('.admin-actions');
-    if (adminActions) {
-        const signInButton = document.createElement('button');
-        signInButton.className = 'btn-secondary';
-        signInButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in with Google';
-        signInButton.onclick = signInToGoogle;
-        adminActions.appendChild(signInButton);
+            }
+        });
     }
 });
-
-// Publications Management
-async function loadPublications() {
-    try {
-        const data = await loadFromGoogleSheets(SHEET_NAMES.publications);
-        if (!data) {
-            throw new Error('Failed to load publications data');
-        }
-        
-        displayPublicationsInTable(data);
-    } catch (error) {
-        console.error('Error loading publications:', error);
-        showNotification('Failed to load publications', 'error');
-    }
-}
-
-function displayPublicationsInTable(publications) {
-    const tableBody = document.getElementById('publicationsTableBody');
-    if (!tableBody) {
-        console.error('Publications table body not found');
-        return;
-    }
-
-    tableBody.innerHTML = publications.map(pub => `
-        <tr data-id="${pub.id}">
-            <td>${pub.id}</td>
-            <td>${pub.title}</td>
-            <td>${pub.journal}</td>
-            <td>${pub.authors}</td>
-            <td>${pub.year}</td>
-            <td>${pub.doi}</td>
-            <td>
-                <button class="edit-btn" onclick="editPublication(${pub.id})">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="delete-btn" onclick="deletePublication(${pub.id})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function addPublication() {
-    showModal('Add New Publication');
-    const modalForm = document.getElementById('modalForm');
-    modalForm.innerHTML = `
-        <div class="form-row">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" name="title" required>
-            </div>
-            <div class="form-group">
-                <label>Journal</label>
-                <input type="text" name="journal" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>Authors</label>
-                <input type="text" name="authors" required>
-            </div>
-            <div class="form-group">
-                <label>Year</label>
-                <input type="text" name="year" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>DOI</label>
-            <input type="text" name="doi" required>
-        </div>
-        <div class="form-group">
-            <label>Excerpt</label>
-            <textarea name="excerpt" required></textarea>
-        </div>
-        <div class="form-group">
-            <label>Details</label>
-            <textarea name="details" required></textarea>
-        </div>
-        <div class="form-group">
-            <label>PDF File</label>
-            <input type="text" name="pdfFile" required>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn-primary">Save Publication</button>
-            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-        </div>
-    `;
-    modalForm.onsubmit = handlePublicationSubmit;
-}
-
-function editPublication(pubId) {
-    showModal('Edit Publication');
-    
-    // Get current data from localStorage or fetch from JSON file
-    const storedData = localStorage.getItem('publicationsData');
-    let publications = storedData ? JSON.parse(storedData).publications : [];
-    
-    if (!publications.length) {
-        fetch('../data/publications.json')
-            .then(response => response.json())
-            .then(data => {
-                const publication = data.publications.find(p => p.id === pubId);
-                if (publication) {
-                    populatePublicationForm(publication);
-                }
-            });
-    } else {
-        const publication = publications.find(p => p.id === pubId);
-        if (publication) {
-            populatePublicationForm(publication);
-        }
-    }
-}
-
-function populatePublicationForm(publication) {
-    const modalForm = document.getElementById('modalForm');
-    modalForm.innerHTML = `
-        <input type="hidden" name="id" value="${publication.id}">
-        <div class="form-row">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" name="title" value="${publication.title}" required>
-            </div>
-            <div class="form-group">
-                <label>Journal</label>
-                <input type="text" name="journal" value="${publication.journal}" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>Authors</label>
-                <input type="text" name="authors" value="${publication.authors}" required>
-            </div>
-            <div class="form-group">
-                <label>Year</label>
-                <input type="text" name="year" value="${publication.year}" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>DOI</label>
-            <input type="text" name="doi" value="${publication.doi}" required>
-        </div>
-        <div class="form-group">
-            <label>Excerpt</label>
-            <textarea name="excerpt" required>${publication.excerpt}</textarea>
-        </div>
-        <div class="form-group">
-            <label>Details</label>
-            <textarea name="details" required>${publication.details}</textarea>
-        </div>
-        <div class="form-group">
-            <label>PDF File</label>
-            <input type="text" name="pdfFile" value="${publication.pdfFile}" required>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn-primary">Update Publication</button>
-            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-        </div>
-    `;
-    modalForm.onsubmit = handlePublicationSubmit;
-}
-
-function handlePublicationSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const publicationData = Object.fromEntries(formData.entries());
-    
-    try {
-        // For now, we'll just show a success message
-        showNotification('Publication saved successfully', 'success');
-        closeModal();
-        loadPublications();
-    } catch (error) {
-        console.error('Error saving publication:', error);
-        showNotification('Error saving publication', 'error');
-    }
-}
-
-function deletePublication(pubId) {
-    if (confirm('Are you sure you want to delete this publication?')) {
-        // Get current data
-        let storedData = localStorage.getItem('publicationsData');
-        let data = storedData ? JSON.parse(storedData) : { publications: [] };
-        
-        // Remove publication
-        data.publications = data.publications.filter(p => p.id !== pubId);
-        
-        // Save to localStorage
-        localStorage.setItem('publicationsData', JSON.stringify(data));
-        
-        showNotification('Publication deleted successfully', 'success');
-        loadPublications();
-    }
-} 

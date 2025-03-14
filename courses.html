@@ -3,32 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses - Research Center</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Our Courses - Chemistry Lab</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="css/courses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
     <header>
-        <nav>
-            <div class="logo">
-                <img src="images/logo.png" alt="Logo">
-                <h1>Research Center</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="research.html">Research</a></li>
-                <li><a href="courses.html" class="active">Courses</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="mobile-menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header><header>
         <nav>
             <div class="logo">
                 <img src="images/logo.png" alt="Chemistry Center Logo">
@@ -40,7 +22,7 @@
                 <li><a href="team.html">Team</a></li>
                 <li><a href="research.html">Research</a></li>
                 <li><a href="publications.html">Publications</a></li>
-                <li><a href="courses.html"  class="active">Courses</a></li>
+                <li><a href="courses.html" class="active">Courses</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="mobile-menu-btn">
@@ -51,24 +33,32 @@
         </nav>
     </header>
 
-    <!-- Courses Section -->
-    <section class="courses-section">
-        <div class="courses-container">
-            <h2>Our Courses</h2>
-            <div id="courses-container">
-                <!-- Course categories will be loaded here -->
+    <!-- Courses section -->
+    <section id="courses" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Courses</h2>
+                <p class="section-description">Explore our comprehensive range of chemistry courses designed to enhance your knowledge and skills.</p>
+            </div>
+            <div class="courses-grid">
+                <!-- Courses will be loaded here dynamically -->
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading courses...</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Resources Section -->
-    <section class="resources-section">
-        <div class="resources-container">
-            <div id="resources-container">
-                <!-- Resources will be loaded here -->
+    <!-- Course Modal -->
+    <div class="course-modal">
+        <div class="course-modal-content">
+            <button class="course-modal-close">&times;</button>
+            <div class="course-modal-body">
+                <!-- Course details will be loaded here -->
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer class="rich-footer">
@@ -104,9 +94,6 @@
                     <a href="#" class="social-icon" title="ResearchGate">
                         <i class="fab fa-researchgate"></i>
                     </a>
-                    <a href="#" class="social-icon" title="Zalo">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OTYuMjM4IDQ5NiI+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNNDg3LjgzOSAyMjUuMzMyYzAtMTEzLjk2LTkxLjY0LTIwNi40LTIwNC42NC0yMDYuNGgtLjc5OWMtMTEzIDAtMjA0LjY0IDkyLjQ0LTIwNC42NCAyMDYuNCAwIDM5LjA0IDEwLjcyIDc1LjM1OSAyOS40NzkgMTA2LjcxOWwtMjAuMTYgNTguMzE5Yy0xLjY4IDQuODAxLS45NiAxMC4xMiAxLjkyIDE0LjE2IDIuODc5IDQuMDggNy41MTkgNi40OCAxMi40NzkgNi40OGgzOC4zMmM0LjE2IDAgOC4yNC0xLjYgMTEuMzYtNC40OGw1NC43MTktNTAuMjRjMjMuMzYgMTEuNTIgNDguOTYgMTcuNiA3NS4zNTkgMTcuNmguODE5YzExMyAwIDIwNC42NC05Mi40NCAyMDQuNjQtMjA2LjR6bS0yMDUuNDQgMTM4LjI0aC0uNzk5Yy0yNy44NCAwLTUzLjc2LTcuMDQtNzYuMzE5LTIwLjQ4LTQuMjQtMi41Ni05LjYtMi4yNC0xMy41MiAxLjI4bC01MC43MTkgNDYuNTYgMTcuOTItNTEuODRjMS40NC00LjE2LjU2LTguOC0yLjQtMTIuMTZsLTIuNC0yLjRjLTE5LjM1OS0yNy4wNC0yOS41OTktNTkuMi0yOS41OTktOTIuOCAwLTg4LjcyIDcxLjc1OS0xNjEuMjggMTU5LjYtMTYxLjI4aC43OTljODcuODQgMCAxNTkuNiA3Mi41NiAxNTkuNiAxNjEuMjhzLTcxLjc1OSAxNjEuMjgtMTU5LjYgMTYxLjI4em0tNjIuMzE5LTEzNS4yYzAgNS4yOCA0LjE2IDkuNiA5LjI3OSA5LjZoMjUuNnYyNS42YzAgNS4xMiA0LjE2IDkuMjc5IDkuNDQgOS4yNzloLjE2YzUuMTIgMCA5LjI3OS00LjE2IDkuMjc5LTkuMjc5di0yNS42aDI1LjZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtLjE2YzAtNS4xMi00LjE2LTkuMjc5LTkuMjc5LTkuMjc5aC0yNS42di0yNS42YzAtNS4xMi00LjE2LTkuMjc5LTkuNDQtOS4yNzloLS4xNmMtNS4xMiAwLTkuMjc5IDQuMTYtOS4yNzkgOS4yNzl2MjUuNmgtMjUuNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHptMTM1LjY3OSAwYzAgNS4yOCA0LjMyIDkuNiA5LjQ0IDkuNmguMTZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtNjRjMC01LjEyLTQuMTYtOS4yNzktOS40NC05LjI3OWgtLjE2Yy01LjEyIDAtOS4yNzkgNC4xNi05LjI3OSA5LjI3OXptLTkxLjE5OSA4NS43NmMwIDUuMTIgNC4zMiA5LjI3OSA5LjQ0IDkuMjc5aC4xNmM1LjEyIDAgOS4yNzktNC4xNiA5LjI3OS05LjI3OXYtNjRjMC01LjEyLTQuMTYtOS40NC05LjQ0LTkuNDRoLS4xNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHoiLz48L3N2Zz4=" alt="Zalo" class="zalo-icon">
-                    </a>
                 </div>
             </div>
             <div class="footer-section">
@@ -124,7 +111,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/courses-new.js"></script>
+    <script src="js/courses.js"></script>
 </body>
 </html> 

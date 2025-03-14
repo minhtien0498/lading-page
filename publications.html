@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Center - Publications</title>
+    <title>Publications - Chemistry Lab</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/publications.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
         <nav>
             <div class="logo">
@@ -19,7 +21,7 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="team.html">Team</a></li>
                 <li><a href="research.html">Research</a></li>
-                <li><a href="publications.html" class="active">Publications & Certificates</a></li>
+                <li><a href="publications.html" class="active">Publications</a></li>
                 <li><a href="courses.html">Courses</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -31,40 +33,24 @@
         </nav>
     </header>
 
-    <main>
-        <section class="publications-section">
-            <div class="publications-container">
-                <h2>Publications & Certificates</h2>
-                <div class="publications-grid">
-                    <!-- Publications will be loaded dynamically -->
-                </div>
-
-                <div class="publications-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-file-alt"></i>
-                        <h3>30+</h3>
-                        <p>Research Papers</p>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-certificate"></i>
-                        <h3>5+</h3>
-                        <p>Patents</p>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-quote-right"></i>
-                        <h3>500+</h3>
-                        <p>Citations</p>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-h-index"></i>
-                        <h3>15+</h3>
-                        <p>H-Index</p>
-                    </div>
+    <!-- Publications Section -->
+    <section id="publications" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Publications</h2>
+                <p class="section-description">Explore our research contributions and scientific publications.</p>
+            </div>
+            <div class="publications-grid">
+                <!-- Publications will be loaded here dynamically -->
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading publications...</p>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer class="rich-footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -72,9 +58,7 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a href="team.html">Team</a></li>
                     <li><a href="research.html">Research</a></li>
-                    <li><a href="publications.html">Publications</a></li>
                     <li><a href="courses.html">Courses</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
@@ -100,9 +84,6 @@
                     <a href="#" class="social-icon" title="ResearchGate">
                         <i class="fab fa-researchgate"></i>
                     </a>
-                    <a href="#" class="social-icon" title="Zalo">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OTYuMjM4IDQ5NiI+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNNDg3LjgzOSAyMjUuMzMyYzAtMTEzLjk2LTkxLjY0LTIwNi40LTIwNC42NC0yMDYuNGgtLjc5OWMtMTEzIDAtMjA0LjY0IDkyLjQ0LTIwNC42NCAyMDYuNCAwIDM5LjA0IDEwLjcyIDc1LjM1OSAyOS40NzkgMTA2LjcxOWwtMjAuMTYgNTguMzE5Yy0xLjY4IDQuODAxLS45NiAxMC4xMiAxLjkyIDE0LjE2IDIuODc5IDQuMDggNy41MTkgNi40OCAxMi40NzkgNi40OGgzOC4zMmM0LjE2IDAgOC4yNC0xLjYgMTEuMzYtNC40OGw1NC43MTktNTAuMjRjMjMuMzYgMTEuNTIgNDguOTYgMTcuNiA3NS4zNTkgMTcuNmguODE5YzExMyAwIDIwNC42NC05Mi40NCAyMDQuNjQtMjA2LjR6bS0yMDUuNDQgMTM4LjI0aC0uNzk5Yy0yNy44NCAwLTUzLjc2LTcuMDQtNzYuMzE5LTIwLjQ4LTQuMjQtMi41Ni05LjYtMi4yNC0xMy41MiAxLjI4bC01MC43MTkgNDYuNTYgMTcuOTItNTEuODRjMS40NC00LjE2LjU2LTguOC0yLjQtMTIuMTZsLTIuNC0yLjRjLTE5LjM1OS0yNy4wNC0yOS41OTktNTkuMi0yOS41OTktOTIuOCAwLTg4LjcyIDcxLjc1OS0xNjEuMjggMTU5LjYtMTYxLjI4aC43OTljODcuODQgMCAxNTkuNiA3Mi41NiAxNTkuNiAxNjEuMjhzLTcxLjc1OSAxNjEuMjgtMTU5LjYgMTYxLjI4em0tNjIuMzE5LTEzNS4yYzAgNS4yOCA0LjE2IDkuNiA5LjI3OSA5LjZoMjUuNnYyNS42YzAgNS4xMiA0LjE2IDkuMjc5IDkuNDQgOS4yNzloLjE2YzUuMTIgMCA5LjI3OS00LjE2IDkuMjc5LTkuMjc5di0yNS42aDI1LjZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtLjE2YzAtNS4xMi00LjE2LTkuMjc5LTkuMjc5LTkuMjc5aC0yNS42di0yNS42YzAtNS4xMi00LjE2LTkuMjc5LTkuNDQtOS4yNzloLS4xNmMtNS4xMiAwLTkuMjc5IDQuMTYtOS4yNzkgOS4yNzl2MjUuNmgtMjUuNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHptMTM1LjY3OSAwYzAgNS4yOCA0LjMyIDkuNiA5LjQ0IDkuNmguMTZjNS4xMiAwIDkuMjc5LTQuMzIgOS4yNzktOS40NHYtNjRjMC01LjEyLTQuMTYtOS4yNzktOS40NC05LjI3OWgtLjE2Yy01LjEyIDAtOS4yNzkgNC4xNi05LjI3OSA5LjI3OXptLTkxLjE5OSA4NS43NmMwIDUuMTIgNC4zMiA5LjI3OSA5LjQ0IDkuMjc5aC4xNmM1LjEyIDAgOS4yNzktNC4xNiA5LjI3OS05LjI3OXYtNjRjMC01LjEyLTQuMTYtOS40NC05LjQ0LTkuNDRoLS4xNmMtNS4xMiAwLTkuMjc5IDQuMzItOS4yNzkgOS40NHoiLz48L3N2Zz4=" alt="Zalo" class="zalo-icon">
-                    </a>
                 </div>
             </div>
             <div class="footer-section">
@@ -115,28 +96,11 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Chemistry Center - HCMUS Chemistry Research. All rights reserved.</p>
+            <p>&copy; 2024 Research Center. All rights reserved.</p>
         </div>
     </footer>
 
-    <script>
-        // Mobile Menu
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-    </script>
+    <!-- Scripts -->
     <script src="js/publications.js"></script>
 </body>
 </html> 

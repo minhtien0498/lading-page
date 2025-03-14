@@ -3,9 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Center - Our Team</title>
+    <title>Our Team</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .bio {
+            position: relative;
+            max-height: 100px; /* Khoảng 5 dòng */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-bottom: 10px;
+        }
+
+        .bio.expanded {
+            max-height: 1000px; /* Đủ cao để hiển thị toàn bộ nội dung */
+        }
+
+        .bio-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(transparent, white);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .bio.expanded .bio-gradient {
+            opacity: 0;
+        }
+
+        .show-more-btn {
+            display: none; /* Ẩn mặc định, chỉ hiện khi cần thiết */
+            background: none;
+            border: none;
+            color: #0066cc;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 5px 0;
+            margin-top: 5px;
+        }
+
+        .show-more-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Carousel Styles */
+        .team-carousel-container {
+            position: relative;
+            max-width: 1000px; /* Giảm max-width xuống */
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .team-grid {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 20px; /* Giảm khoảng cách giữa các member */
+        }
+
+        .team-member {
+            flex: 0 0 calc(33.333% - 14px); /* Điều chỉnh width */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            max-width: 300px; /* Giới hạn kích thước tối đa */
+        }
+
+        .team-member .member-image {
+            width: 100%;
+            height: 200px; /* Giới hạn chiều cao ảnh */
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .team-member .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-member .member-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 215px); /* 200px cho ảnh + 15px margin */
+        }
+
+        .team-member h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .team-member .position {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .view-bio-btn {
+            display: inline-block;
+            background: transparent;
+            color: #0066cc;
+            padding: 8px 16px;
+            border: 1px solid #0066cc;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-bio-btn:hover {
+            background: rgba(0, 102, 204, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .view-bio-btn::after {
+            content: '→';
+            margin-left: 8px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            vertical-align: middle;
+        }
+
+        .view-bio-btn:hover::after {
+            transform: translateX(4px);
+        }
+
+        .bio-preview {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .bio-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(transparent, white);
+            pointer-events: none;
+        }
+
+        .member-social {
+            margin-top: 15px;
+        }
+
+        .member-social a {
+            margin-right: 10px;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .team-member.active {
+            opacity: 1;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .carousel-btn.prev {
+            left: 0;
+        }
+
+        .carousel-btn.next {
+            right: 0;
+        }
+
+        .carousel-btn i {
+            font-size: 20px;
+        }
+
+        /* Ẩn overflow để tránh scroll ngang */
+        .team-container {
+            overflow: hidden;
+        }
+
+        /* New styles */
+        .team-section {
+            padding: 80px 0;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        }
+
+        .team-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .team-intro h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .team-intro h2 span {
+            color: #0066cc;
+        }
+
+        .team-intro p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .team-video-container {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .team-video {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+        }
+
+        /* Team member hover effects */
+        .team-member {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .team-member .member-image {
+            border-radius: 15px 15px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-member .member-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .team-member:hover .member-image::after {
+            opacity: 1;
+        }
+
+        .member-social {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.9);
+            transition: bottom 0.3s ease;
+            z-index: 2;
+        }
+
+        .team-member:hover .member-social {
+            bottom: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll animation for team members */
+        .team-member {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .team-member.active {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Modal styles for detailed bio */
+        .bio-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .bio-modal.active {
+            opacity: 1;
+            display: flex;
+        }
+
+        .bio-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .bio-modal.active .bio-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-member-info {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .modal-member-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .modal-member-info h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .modal-position {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .modal-bio {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .modal-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-social a {
+            color: #666;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .modal-social a:hover {
+            color: #0066cc;
+        }
+
+        .bio-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .bio-modal-close:hover {
+            background: rgba(0,0,0,0.1);
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .modal-member-info {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-member-image {
+                max-width: 200px;
+                margin: 0 auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -33,72 +488,33 @@
 
     <main>
         <section class="team-section">
+            <div class="team-intro">
+                <h2>Meet Our Team</h2>
+                <p>Chúng tôi là một đội ngũ các nhà nghiên cứu và giảng viên đam mê trong lĩnh vực hóa học. 
+                   Với kinh nghiệm đa dạng từ phân tích hóa học đến nghiên cứu môi trường, 
+                   chúng tôi cam kết mang đến những giải pháp sáng tạo và bền vững cho các thách thức trong ngành.</p>
+            </div>
+
+            <div class="team-video-container">
+                <iframe class="team-video"
+                        src="https://www.youtube.com/embed/eFE-jI9qhLo?si=37ggT4JSaRFA-wN3"
+                        title="Team Introduction"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                </iframe>
+            </div>
+
             <div class="team-container">
-                <h2>Our Research Team</h2>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a" alt="Dr. Nguyen Van A">
-                        </div>
-                        <div class="member-info">
-                            <h3>Dr. Nguyen Van A</h3>
-                            <p class="position">Director</p>
-                            <p class="expertise">Analytical Chemistry</p>
-                            <div class="member-social">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
-                                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
+                <div class="team-carousel-container">
+                    <button class="carousel-btn prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="team-grid">
+                        <!-- Team members will be loaded dynamically from Google Sheets -->
                     </div>
-
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2" alt="Dr. Tran Thi B">
-                        </div>
-                        <div class="member-info">
-                            <h3>Dr. Tran Thi B</h3>
-                            <p class="position">Senior Researcher</p>
-                            <p class="expertise">Environmental Chemistry</p>
-                            <div class="member-social">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
-                                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Dr. Le Van C">
-                        </div>
-                        <div class="member-info">
-                            <h3>Dr. Le Van C</h3>
-                            <p class="position">Research Scientist</p>
-                            <p class="expertise">Water Treatment</p>
-                            <div class="member-social">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
-                                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Dr. Pham Thi D">
-                        </div>
-                        <div class="member-info">
-                            <h3>Dr. Pham Thi D</h3>
-                            <p class="position">Research Scientist</p>
-                            <p class="expertise">Chemical Analysis</p>
-                            <div class="member-social">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
-                                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="carousel-btn next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
 
                 <div class="team-stats">
@@ -125,6 +541,18 @@
                 </div>
             </div>
         </section>
+
+        <!-- Modal for detailed bio -->
+        <div class="bio-modal">
+            <div class="bio-modal-content">
+                <button class="bio-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="bio-modal-body">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="rich-footer">
@@ -180,6 +608,7 @@
         </div>
     </footer>
 
+    <script src="js/team.js"></script>
     <script>
         // Mobile Menu
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
