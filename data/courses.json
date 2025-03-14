@@ -1,0 +1,76 @@
+{
+    "categories": [
+        {
+            "id": 1,
+            "name": "Research Methods",
+            "courses": [
+                {
+                    "id": 1,
+                    "title": "Quantitative Research Methods",
+                    "duration": "8 weeks",
+                    "price": "$299",
+                    "description": "Learn advanced quantitative research techniques and data analysis methods.",
+                    "instructor": "Dr. Sarah Johnson",
+                    "level": "Advanced",
+                    "category": "Research Methods",
+                    "isShow": true
+                },
+                {
+                    "id": 2,
+                    "title": "Qualitative Research Design",
+                    "duration": "6 weeks",
+                    "price": "$249",
+                    "description": "Master qualitative research methodologies and data collection techniques.",
+                    "instructor": "Prof. Michael Chen",
+                    "level": "Intermediate",
+                    "category": "Research Methods",
+                    "isShow": true
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Data Analysis",
+            "courses": [
+                {
+                    "id": 3,
+                    "title": "Statistical Analysis",
+                    "duration": "10 weeks",
+                    "price": "$349",
+                    "description": "Comprehensive statistical analysis and interpretation for research.",
+                    "instructor": "Dr. Emily Brown",
+                    "level": "Advanced",
+                    "category": "Data Analysis",
+                    "isShow": true
+                },
+                {
+                    "id": 4,
+                    "title": "Data Visualization",
+                    "duration": "6 weeks",
+                    "price": "$279",
+                    "description": "Create effective visualizations for research data presentation.",
+                    "instructor": "Prof. David Wilson",
+                    "level": "Intermediate",
+                    "category": "Data Analysis",
+                    "isShow": true
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "id": 1,
+            "title": "Research Ethics Guide",
+            "description": "Comprehensive guide to research ethics and best practices",
+            "link": "https://example.com/ethics-guide",
+            "isShow": true
+        },
+        {
+            "id": 2,
+            "title": "Statistical Software Tutorial",
+            "description": "Step-by-step guide to using statistical software",
+            "link": "https://example.com/stats-tutorial",
+            "isShow": true
+        }
+    ]
+} 

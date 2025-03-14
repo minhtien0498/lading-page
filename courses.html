@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Center - Courses & Resources</title>
+    <title>Courses - Research Center</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo.png" alt="Logo">
+                <h1>Research Center</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="courses.html" class="active">Courses</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header><header>
         <nav>
             <div class="logo">
                 <img src="images/logo.png" alt="Chemistry Center Logo">
@@ -20,7 +40,7 @@
                 <li><a href="team.html">Team</a></li>
                 <li><a href="research.html">Research</a></li>
                 <li><a href="publications.html">Publications</a></li>
-                <li><a href="courses.html" class="active">Courses & Resources</a></li>
+                <li><a href="courses.html"  class="active">Courses</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="mobile-menu-btn">
@@ -31,84 +51,26 @@
         </nav>
     </header>
 
-    <main>
-        <section class="courses-section">
-            <div class="courses-container">
-                <h2>Courses & Resources</h2>
-                <div class="courses-grid">
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Analytical Chemistry Course">
-                        </div>
-                        <div class="course-content">
-                            <h3>Analytical Chemistry</h3>
-                            <p>Learn advanced techniques in chemical analysis and laboratory methods.</p>
-                            <div class="course-meta">
-                                <span><i class="fas fa-clock"></i> 8 weeks</span>
-                                <span><i class="fas fa-user-graduate"></i> Beginner</span>
-                            </div>
-                            <a href="#" class="course-btn">Learn More</a>
-                        </div>
-                    </div>
-
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Environmental Chemistry Course">
-                        </div>
-                        <div class="course-content">
-                            <h3>Environmental Chemistry</h3>
-                            <p>Study the impact of chemicals on the environment and sustainable solutions.</p>
-                            <div class="course-meta">
-                                <span><i class="fas fa-clock"></i> 10 weeks</span>
-                                <span><i class="fas fa-user-graduate"></i> Intermediate</span>
-                            </div>
-                            <a href="#" class="course-btn">Learn More</a>
-                        </div>
-                    </div>
-
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69" alt="Water Treatment Course">
-                        </div>
-                        <div class="course-content">
-                            <h3>Water Treatment</h3>
-                            <p>Master the principles and practices of water purification and treatment.</p>
-                            <div class="course-meta">
-                                <span><i class="fas fa-clock"></i> 12 weeks</span>
-                                <span><i class="fas fa-user-graduate"></i> Advanced</span>
-                            </div>
-                            <a href="#" class="course-btn">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="resources-section">
-                    <h3>Learning Resources</h3>
-                    <div class="resources-grid">
-                        <div class="resource-card">
-                            <i class="fas fa-book"></i>
-                            <h4>Textbooks</h4>
-                            <p>Access our recommended textbooks and study materials.</p>
-                            <a href="#" class="resource-link">View Resources</a>
-                        </div>
-                        <div class="resource-card">
-                            <i class="fas fa-video"></i>
-                            <h4>Video Lectures</h4>
-                            <p>Watch recorded lectures from our expert instructors.</p>
-                            <a href="#" class="resource-link">Watch Videos</a>
-                        </div>
-                        <div class="resource-card">
-                            <i class="fas fa-flask"></i>
-                            <h4>Lab Manuals</h4>
-                            <p>Download detailed laboratory manuals and protocols.</p>
-                            <a href="#" class="resource-link">Download</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Courses Section -->
+    <section class="courses-section">
+        <div class="courses-container">
+            <h2>Our Courses</h2>
+            <div id="courses-container">
+                <!-- Course categories will be loaded here -->
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- Resources Section -->
+    <section class="resources-section">
+        <div class="resources-container">
+            <div id="resources-container">
+                <!-- Resources will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="rich-footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -116,10 +78,8 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a href="team.html">Team</a></li>
                     <li><a href="research.html">Research</a></li>
-                    <li><a href="publications.html">Publications</a></li>
-                    <li><a href="courses.html">Courses & Resources</a></li>
+                    <li><a href="courses.html">Courses</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
@@ -159,27 +119,12 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Chemistry Center - HCMUS Chemistry Research. All rights reserved.</p>
+            <p>&copy; 2024 Research Center. All rights reserved.</p>
         </div>
     </footer>
 
-    <script>
-        // Mobile Menu
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-    </script>
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/courses-new.js"></script>
 </body>
 </html> 

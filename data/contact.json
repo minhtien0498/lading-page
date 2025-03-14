@@ -1,0 +1,14 @@
+{
+    "address": "123 Research Street, Science District, City, Country",
+    "phone": "+1 (555) 123-4567",
+    "email": "contact@researchcenter.com",
+    "socialMedia": {
+        "facebook": "https://facebook.com/researchcenter",
+        "twitter": "https://twitter.com/researchcenter",
+        "linkedin": "https://linkedin.com/company/researchcenter"
+    },
+    "businessHours": {
+        "weekdays": "9:00 AM - 6:00 PM",
+        "weekends": "10:00 AM - 4:00 PM"
+    }
+} 

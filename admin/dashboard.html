@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Research Center</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="admin-dashboard">
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-user-shield"></i>
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-section="courses">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Courses</span>
+                    </li>
+                    <li data-section="resources">
+                        <i class="fas fa-book"></i>
+                        <span>Resources</span>
+                    </li>
+                    <li data-section="publications">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Publications</span>
+                    </li>
+                    <li data-section="contact">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact Info</span>
+                    </li>
+                    <li id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Welcome, <span id="adminName">Administrator</span></h1>
+                <div class="admin-actions">
+                    <button id="addNewBtn" class="btn-primary">
+                        <i class="fas fa-plus"></i> Add New
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="admin-content">
+                <!-- Courses Section -->
+                <section id="courses" class="admin-section active">
+                    <div class="section-header">
+                        <h2>Manage Courses</h2>
+                        <div class="section-actions">
+                            <button class="btn-secondary" id="addCategoryBtn">
+                                <i class="fas fa-folder-plus"></i> Add Category
+                            </button>
+                        </div>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody">
+                                <!-- Courses data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Resources Section -->
+                <section id="resources" class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Resources</h2>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Link</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resourcesTableBody">
+                                <!-- Resources data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Publications Section -->
+                <section id="publications" class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Publications</h2>
+                        <button class="btn-primary" onclick="addPublication()">
+                            <i class="fas fa-plus"></i> Add Publication
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Journal</th>
+                                    <th>Authors</th>
+                                    <th>Year</th>
+                                    <th>DOI</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="publicationsTableBody">
+                                <!-- Publications will be loaded here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Contact Info Section -->
+                <section id="contact" class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Contact Information</h2>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contactInfoForm">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="street" placeholder="Street">
+                                <input type="text" name="ward" placeholder="Ward">
+                                <input type="text" name="district" placeholder="District">
+                                <input type="text" name="city" placeholder="City">
+                                <input type="text" name="country" placeholder="Country">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Numbers</label>
+                                <input type="text" name="mainPhone" placeholder="Main Phone">
+                                <input type="text" name="mobilePhone" placeholder="Mobile Phone">
+                                <input type="text" name="fax" placeholder="Fax">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Addresses</label>
+                                <input type="email" name="mainEmail" placeholder="Main Email">
+                                <input type="email" name="supportEmail" placeholder="Support Email">
+                                <input type="email" name="admissionEmail" placeholder="Admission Email">
+                            </div>
+                            <div class="form-group">
+                                <label>Social Media</label>
+                                <input type="url" name="facebook" placeholder="Facebook URL">
+                                <input type="url" name="linkedin" placeholder="LinkedIn URL">
+                                <input type="url" name="youtube" placeholder="YouTube URL">
+                                <input type="url" name="zalo" placeholder="Zalo URL">
+                            </div>
+                            <div class="form-group">
+                                <label>Working Hours</label>
+                                <input type="text" name="weekdays" placeholder="Weekdays Hours">
+                                <input type="text" name="saturday" placeholder="Saturday Hours">
+                                <input type="text" name="sunday" placeholder="Sunday Hours">
+                            </div>
+                            <div class="form-group">
+                                <label>Map Embed URL</label>
+                                <input type="url" name="mapUrl" placeholder="Google Maps Embed URL">
+                            </div>
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit -->
+    <div id="item-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Item</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="modalForm">
+                    <!-- Form fields will be dynamically added here -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html> 

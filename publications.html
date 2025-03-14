@@ -19,7 +19,7 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="team.html">Team</a></li>
                 <li><a href="research.html">Research</a></li>
-                <li><a href="publications.html" class="active">Publications</a></li>
+                <li><a href="publications.html" class="active">Publications & Certificates</a></li>
                 <li><a href="courses.html">Courses</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -34,84 +34,9 @@
     <main>
         <section class="publications-section">
             <div class="publications-container">
-                <h2>Research Papers & Patents</h2>
-                
-                <div class="publications-tabs">
-                    <button class="tab-btn active" data-tab="papers">Research Papers</button>
-                    <button class="tab-btn" data-tab="patents">Patents</button>
-                </div>
-
-                <div class="tab-content active" id="papers">
-                    <div class="publications-list">
-                        <div class="publication-item">
-                            <div class="publication-year">2024</div>
-                            <div class="publication-content">
-                                <h3>Advanced Methods for Water Quality Analysis</h3>
-                                <p class="authors">Nguyen Van A, Tran Thi B, Le Van C</p>
-                                <p class="journal">Journal of Environmental Chemistry, 2024</p>
-                                <div class="publication-links">
-                                    <a href="#" class="link-btn"><i class="fas fa-file-pdf"></i> PDF</a>
-                                    <a href="#" class="link-btn"><i class="fas fa-external-link-alt"></i> DOI</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="publication-item">
-                            <div class="publication-year">2023</div>
-                            <div class="publication-content">
-                                <h3>Novel Approaches in Environmental Monitoring</h3>
-                                <p class="authors">Tran Thi B, Pham Thi D</p>
-                                <p class="journal">Environmental Science & Technology, 2023</p>
-                                <div class="publication-links">
-                                    <a href="#" class="link-btn"><i class="fas fa-file-pdf"></i> PDF</a>
-                                    <a href="#" class="link-btn"><i class="fas fa-external-link-alt"></i> DOI</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="publication-item">
-                            <div class="publication-year">2023</div>
-                            <div class="publication-content">
-                                <h3>Innovative Water Treatment Technologies</h3>
-                                <p class="authors">Le Van C, Nguyen Van A</p>
-                                <p class="journal">Water Research, 2023</p>
-                                <div class="publication-links">
-                                    <a href="#" class="link-btn"><i class="fas fa-file-pdf"></i> PDF</a>
-                                    <a href="#" class="link-btn"><i class="fas fa-external-link-alt"></i> DOI</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="patents">
-                    <div class="publications-list">
-                        <div class="publication-item">
-                            <div class="publication-year">2024</div>
-                            <div class="publication-content">
-                                <h3>Method for Advanced Water Purification</h3>
-                                <p class="authors">Nguyen Van A, Tran Thi B</p>
-                                <p class="patent-number">Patent No. US20240012345</p>
-                                <div class="publication-links">
-                                    <a href="#" class="link-btn"><i class="fas fa-file-pdf"></i> Patent</a>
-                                    <a href="#" class="link-btn"><i class="fas fa-external-link-alt"></i> USPTO</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="publication-item">
-                            <div class="publication-year">2023</div>
-                            <div class="publication-content">
-                                <h3>Environmental Monitoring System</h3>
-                                <p class="authors">Le Van C, Pham Thi D</p>
-                                <p class="patent-number">Patent No. US20230098765</p>
-                                <div class="publication-links">
-                                    <a href="#" class="link-btn"><i class="fas fa-file-pdf"></i> Patent</a>
-                                    <a href="#" class="link-btn"><i class="fas fa-external-link-alt"></i> USPTO</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h2>Publications & Certificates</h2>
+                <div class="publications-grid">
+                    <!-- Publications will be loaded dynamically -->
                 </div>
 
                 <div class="publications-stats">
@@ -211,23 +136,7 @@
                 navLinks.classList.remove('active');
             }
         });
-
-        // Publications Tabs
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons and contents
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-
-                // Add active class to clicked button and corresponding content
-                btn.classList.add('active');
-                const tabId = btn.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
     </script>
+    <script src="js/publications.js"></script>
 </body>
 </html> 
