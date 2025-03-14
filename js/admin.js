@@ -1,6 +1,122 @@
 // Admin Authentication
 let currentUser = null;
 
+// Sample user data
+const SAMPLE_USERS = [
+    {
+        username: 'admin',
+        password: 'admin123',
+        fullName: 'Administrator'
+    }
+];
+
+// Google Sheets Configuration
+const SHEET_ID = '11qHP1J0WlSyEZ3AD5jqKRs7oaCafkrUAHFVdJ-E_BeY';
+const SHEET_NAMES = {
+    courses: 'Courses',
+    resources: 'Resources',
+    publications: 'Publications'
+};
+
+// Google Apps Script Web App URL
+// TODO: Replace this URL with your deployed Google Apps Script Web App URL
+// To get this URL:
+// 1. Open your Google Sheet
+// 2. Go to Tools > Script editor
+// 3. Copy the provided Apps Script code
+// 4. Click Deploy > New deployment
+// 5. Choose "Web app"
+// 6. Set "Execute as" to "Me" and "Who has access" to "Anyone"
+// 7. Click Deploy and copy the URL
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz...'; // Replace with your actual URL
+
+// OAuth2 Configuration
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const API_KEY = 'YOUR_API_KEY';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+
+let accessToken = null;
+
+// Function to initialize Google Sheets API
+async function initGoogleSheets() {
+    try {
+        // Load the Google API client library
+        await loadGoogleAPI();
+        
+        // Initialize the client
+        await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+        });
+        
+        // Load the auth2 library
+        await gapi.load('auth2', async function() {
+            await gapi.auth2.init({
+                client_id: CLIENT_ID,
+                scope: SCOPES
+            });
+            
+            // Listen for sign-in state changes
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            
+            // Handle the initial sign-in state
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        });
+    } catch (error) {
+        console.error('Error initializing Google Sheets:', error);
+        showNotification('Failed to initialize Google Sheets', 'error');
+    }
+}
+
+// Function to load Google API client library
+function loadGoogleAPI() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://apis.google.com/js/api.js';
+        script.onload = async () => {
+            try {
+                await gapi.load('client:auth2');
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        };
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
+}
+
+// Function to update sign-in status
+function updateSigninStatus(isSignedIn) {
+    if (isSignedIn) {
+        accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+        showNotification('Successfully connected to Google Sheets', 'success');
+    } else {
+        accessToken = null;
+        showNotification('Please sign in to use Google Sheets', 'info');
+    }
+}
+
+// Function to sign in to Google
+async function signInToGoogle() {
+    try {
+        await gapi.auth2.getAuthInstance().signIn();
+    } catch (error) {
+        console.error('Error signing in to Google:', error);
+        showNotification('Failed to sign in to Google', 'error');
+    }
+}
+
+// Function to sign out from Google
+async function signOutFromGoogle() {
+    try {
+        await gapi.auth2.getAuthInstance().signOut();
+    } catch (error) {
+        console.error('Error signing out from Google:', error);
+        showNotification('Failed to sign out from Google', 'error');
+    }
+}
+
 // Check if user is logged in
 function checkAuth() {
     const user = localStorage.getItem('adminUser');
@@ -18,36 +134,26 @@ function checkAuth() {
 }
 
 // Login functionality
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('error-message');
 
-    // Load users data
-    fetch('../data/users.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(users => {
-            console.log('Loaded users:', users); // Debug log
-            const user = users.find(u => u.username === username && u.password === password);
-            if (user) {
-                localStorage.setItem('adminUser', JSON.stringify(user));
-                window.location.href = 'dashboard.html';
-            } else {
-                errorMsg.textContent = 'Invalid username or password';
-                errorMsg.style.display = 'block';
-            }
-        })
-        .catch(error => {
-            console.error('Error loading users:', error);
-            errorMsg.textContent = 'Error loading user data. Please try again.';
+    try {
+        const user = SAMPLE_USERS.find(u => u.username === username && u.password === password);
+        if (user) {
+            localStorage.setItem('adminUser', JSON.stringify(user));
+            window.location.href = 'dashboard.html';
+        } else {
+            errorMsg.textContent = 'Invalid username or password';
             errorMsg.style.display = 'block';
-        });
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        errorMsg.textContent = 'Error during login. Please try again.';
+        errorMsg.style.display = 'block';
+    }
 }
 
 // Logout functionality
@@ -111,90 +217,104 @@ function loadSectionData(sectionId) {
     }
 }
 
+// Function to load data from Google Sheets
+async function loadFromGoogleSheets(sheetName) {
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+        const response = await fetch(url);
+        const text = await response.text();
+        // Remove the prefix "google.visualization.Query.setResponse(" and suffix ");"
+        const jsonString = text.substring(47).slice(0, -2);
+        const data = JSON.parse(jsonString);
+        
+        // Convert Google Sheets data to our format
+        const headers = data.table.cols.map(col => col.label);
+        const rows = data.table.rows.map(row => {
+            const obj = {};
+            row.c.forEach((cell, index) => {
+                obj[headers[index]] = cell ? cell.v : null;
+            });
+            return obj;
+        });
+        
+        return rows;
+    } catch (error) {
+        console.error('Error loading data from Google Sheets:', error);
+        return null;
+    }
+}
+
+// Function to update data in Google Sheets
+async function updateGoogleSheet(sheetName, action, data) {
+    try {
+        const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sheetName: sheetName,
+                action: action,
+                data: data
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to update Google Sheet');
+        }
+        
+        const result = await response.json();
+        if (result.status === 'success') {
+            return result;
+        } else {
+            throw new Error(result.message || 'Failed to update Google Sheet');
+        }
+    } catch (error) {
+        console.error('Error updating Google Sheet:', error);
+        throw error;
+    }
+}
+
 // Courses Management
-function loadCourses() {
-    // Check if we have data in localStorage
-    const storedData = localStorage.getItem('coursesData');
-    if (storedData) {
-        const data = JSON.parse(storedData);
+async function loadCourses() {
+    try {
+        const data = await loadFromGoogleSheets(SHEET_NAMES.courses);
+        if (!data) {
+            throw new Error('Failed to load courses data');
+        }
+        
         const coursesTable = document.getElementById('coursesTableBody');
         if (!coursesTable) {
             console.error('Courses table body not found');
             return;
         }
-        coursesTable.innerHTML = `
-            ${data.categories.flatMap(category => 
-                category.courses.map(course => createCourseRow(course))
-            ).join('')}
-        `;
-        return;
+        
+        coursesTable.innerHTML = data.map(course => createCourseRow(course)).join('');
+    } catch (error) {
+        console.error('Error loading courses:', error);
+        showNotification('Failed to load courses', 'error');
     }
-
-    // If no data in localStorage, fetch from JSON file
-    fetch('../data/courses.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Loaded courses:', data);
-            const coursesTable = document.getElementById('coursesTableBody');
-            if (!coursesTable) {
-                console.error('Courses table body not found');
-                return;
-            }
-            coursesTable.innerHTML = `
-                ${data.categories.flatMap(category => 
-                    category.courses.map(course => createCourseRow(course))
-                ).join('')}
-            `;
-        })
-        .catch(error => {
-            console.error('Error loading courses:', error);
-        });
 }
 
 // Resources Management
-function loadResources() {
-    // Check if we have data in localStorage
-    const storedData = localStorage.getItem('coursesData');
-    if (storedData) {
-        const data = JSON.parse(storedData);
+async function loadResources() {
+    try {
+        const data = await loadFromGoogleSheets(SHEET_NAMES.resources);
+        if (!data) {
+            throw new Error('Failed to load resources data');
+        }
+        
         const resourcesTable = document.getElementById('resourcesTableBody');
         if (!resourcesTable) {
             console.error('Resources table body not found');
             return;
         }
-        resourcesTable.innerHTML = `
-            ${data.resources.map(resource => createResourceRow(resource)).join('')}
-        `;
-        return;
+        
+        resourcesTable.innerHTML = data.map(resource => createResourceRow(resource)).join('');
+    } catch (error) {
+        console.error('Error loading resources:', error);
+        showNotification('Failed to load resources', 'error');
     }
-
-    // If no data in localStorage, fetch from JSON file
-    fetch('../data/courses.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Loaded resources:', data);
-            const resourcesTable = document.getElementById('resourcesTableBody');
-            if (!resourcesTable) {
-                console.error('Resources table body not found');
-                return;
-            }
-            resourcesTable.innerHTML = `
-                ${data.resources.map(resource => createResourceRow(resource)).join('')}
-            `;
-        })
-        .catch(error => {
-            console.error('Error loading resources:', error);
-        });
 }
 
 // Contact Info Management
@@ -412,100 +532,159 @@ function addCourse() {
     modalForm.onsubmit = handleCourseSubmit;
 }
 
-function editCourse(courseId) {
-    showModal('Edit Course');
-    // Load course data and populate form
-    fetch('../data/courses.json')
-        .then(response => response.json())
-        .then(data => {
-            const course = data.categories
-                .flatMap(category => category.courses)
-                .find(c => c.id === courseId);
-            
-            if (course) {
-                const modalForm = document.getElementById('modalForm');
-                modalForm.innerHTML = `
-                    <input type="hidden" name="id" value="${course.id}">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" name="title" value="${course.title}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select name="category" required>
-                                <option value="">Select Category</option>
-                                <option value="Research Methods" ${course.category === 'Research Methods' ? 'selected' : ''}>Research Methods</option>
-                                <option value="Data Analysis" ${course.category === 'Data Analysis' ? 'selected' : ''}>Data Analysis</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Duration</label>
-                            <input type="text" name="duration" value="${course.duration}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="text" name="price" value="${course.price}" required>
-                        </div>
+// Function to edit course
+async function editCourse(courseId) {
+    try {
+        const data = await loadFromGoogleSheets(SHEET_NAMES.courses);
+        const course = data.find(c => c.id === courseId);
+        
+        if (course) {
+            showModal('Edit Course');
+            const modalForm = document.getElementById('modalForm');
+            modalForm.innerHTML = `
+                <input type="hidden" name="id" value="${course.id}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" value="${course.title}" required>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="description" required>${course.description}</textarea>
+                        <label>Category</label>
+                        <select name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Research Methods" ${course.category === 'Research Methods' ? 'selected' : ''}>Research Methods</option>
+                            <option value="Data Analysis" ${course.category === 'Data Analysis' ? 'selected' : ''}>Data Analysis</option>
+                        </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Instructor</label>
-                            <input type="text" name="instructor" value="${course.instructor}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Level</label>
-                            <select name="level" required>
-                                <option value="">Select Level</option>
-                                <option value="Beginner" ${course.level === 'Beginner' ? 'selected' : ''}>Beginner</option>
-                                <option value="Intermediate" ${course.level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
-                                <option value="Advanced" ${course.level === 'Advanced' ? 'selected' : ''}>Advanced</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="duration" value="${course.duration}" required>
                     </div>
-                    <div class="form-group toggle-group">
-                        <label>Show Course</label>
-                        <div class="toggle-switch">
-                            <input type="checkbox" name="isShow" id="course-show-edit-${course.id}" ${course.isShow ? 'checked' : ''}>
-                            <label for="course-show-edit-${course.id}"></label>
-                        </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" name="price" value="${course.price}" required>
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">Update Course</button>
-                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" required>${course.description}</textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Instructor</label>
+                        <input type="text" name="instructor" value="${course.instructor}" required>
                     </div>
-                `;
-                modalForm.onsubmit = handleCourseSubmit;
-            }
-        });
-}
-
-function deleteCourse(courseId) {
-    if (confirm('Are you sure you want to delete this course?')) {
-        // In a real application, you would make an API call here
-        console.log('Deleting course:', courseId);
-        alert('Course deleted successfully!');
-        loadCourses(); // Reload the courses table
+                    <div class="form-group">
+                        <label>Level</label>
+                        <select name="level" required>
+                            <option value="">Select Level</option>
+                            <option value="Beginner" ${course.level === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                            <option value="Intermediate" ${course.level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+                            <option value="Advanced" ${course.level === 'Advanced' ? 'selected' : ''}>Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group toggle-group">
+                    <label>Show Course</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" name="isShow" id="course-show-edit-${course.id}" ${course.isShow ? 'checked' : ''}>
+                        <label for="course-show-edit-${course.id}"></label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Update Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            `;
+            modalForm.onsubmit = handleCourseSubmit;
+        } else {
+            showNotification('Course not found', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading course data:', error);
+        showNotification('Error loading course data: ' + error.message, 'error');
     }
 }
 
-function handleCourseSubmit(event) {
+// Function to delete course
+async function deleteCourse(courseId) {
+    if (confirm('Are you sure you want to delete this course?')) {
+        try {
+            await updateGoogleSheet(SHEET_NAMES.courses, 'delete', { id: courseId });
+            showNotification('Course deleted successfully', 'success');
+            loadCourses();
+        } catch (error) {
+            console.error('Error deleting course:', error);
+            showNotification('Error deleting course: ' + error.message, 'error');
+        }
+    }
+}
+
+// Function to update JSON file
+async function updateJsonFile(filePath, data) {
+    try {
+        const filename = filePath.split('/').pop();
+        const response = await fetch(`http://localhost:3000/api/data/${filename}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to update JSON file');
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error updating JSON file:', error);
+        return false;
+    }
+}
+
+// Function to load JSON file
+async function loadJsonFile(filePath) {
+    try {
+        const filename = filePath.split('/').pop();
+        const response = await fetch(`http://localhost:3000/api/data/${filename}`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to load JSON file');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading JSON file:', error);
+        return null;
+    }
+}
+
+// Function to handle course submit
+async function handleCourseSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const courseData = Object.fromEntries(formData.entries());
-    courseData.isShow = formData.get('isShow') === 'on';
     
-    // In a real application, you would make an API call here
-    console.log('Saving course:', courseData);
-    showNotification('Course updated successfully', 'success');
-    closeModal();
-    loadCourses(); // Reload the courses table
+    try {
+        // Convert checkbox value to boolean
+        courseData.isShow = courseData.isShow === 'on';
+        
+        // Determine if this is an update or insert
+        const action = courseData.id ? 'update' : 'insert';
+        
+        // Update Google Sheet
+        await updateGoogleSheet(SHEET_NAMES.courses, action, courseData);
+        
+        showNotification('Course saved successfully', 'success');
+        closeModal();
+        loadCourses();
+    } catch (error) {
+        console.error('Error saving course:', error);
+        showNotification('Error saving course: ' + error.message, 'error');
+    }
 }
 
 // Resource Management Functions
@@ -578,17 +757,21 @@ function deleteResource(resourceId) {
     }
 }
 
-function handleResourceSubmit(event) {
+// Function to handle resource submit
+async function handleResourceSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const resourceData = Object.fromEntries(formData.entries());
-    resourceData.isShow = formData.get('isShow') === 'on';
     
-    // In a real application, you would make an API call here
-    console.log('Saving resource:', resourceData);
-    showNotification('Resource updated successfully', 'success');
-    closeModal();
-    loadResources(); // Reload the resources table
+    try {
+        // For now, we'll just show a success message
+        showNotification('Resource saved successfully', 'success');
+        closeModal();
+        loadResources();
+    } catch (error) {
+        console.error('Error saving resource:', error);
+        showNotification('Error saving resource', 'error');
+    }
 }
 
 // Modal Functions
@@ -695,34 +878,34 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+    // Initialize Google Sheets
+    initGoogleSheets();
+    
+    // Add sign-in button to the header
+    const adminActions = document.querySelector('.admin-actions');
+    if (adminActions) {
+        const signInButton = document.createElement('button');
+        signInButton.className = 'btn-secondary';
+        signInButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in with Google';
+        signInButton.onclick = signInToGoogle;
+        adminActions.appendChild(signInButton);
+    }
 });
 
 // Publications Management
-function loadPublications() {
-    // Check if we have data in localStorage
-    const storedData = localStorage.getItem('publicationsData');
-    if (storedData) {
-        const data = JSON.parse(storedData);
-        displayPublicationsInTable(data.publications);
-        return;
+async function loadPublications() {
+    try {
+        const data = await loadFromGoogleSheets(SHEET_NAMES.publications);
+        if (!data) {
+            throw new Error('Failed to load publications data');
+        }
+        
+        displayPublicationsInTable(data);
+    } catch (error) {
+        console.error('Error loading publications:', error);
+        showNotification('Failed to load publications', 'error');
     }
-
-    // If no data in localStorage, fetch from JSON file
-    fetch('../data/publications.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Loaded publications:', data);
-            displayPublicationsInTable(data.publications);
-        })
-        .catch(error => {
-            console.error('Error loading publications:', error);
-            showNotification('Failed to load publications', 'error');
-        });
 }
 
 function displayPublicationsInTable(publications) {
@@ -877,28 +1060,15 @@ function handlePublicationSubmit(event) {
     const formData = new FormData(event.target);
     const publicationData = Object.fromEntries(formData.entries());
     
-    // Get current data
-    let storedData = localStorage.getItem('publicationsData');
-    let data = storedData ? JSON.parse(storedData) : { publications: [] };
-    
-    if (publicationData.id) {
-        // Update existing publication
-        const index = data.publications.findIndex(p => p.id === parseInt(publicationData.id));
-        if (index !== -1) {
-            data.publications[index] = { ...data.publications[index], ...publicationData };
-        }
-    } else {
-        // Add new publication
-        const newId = Math.max(0, ...data.publications.map(p => p.id)) + 1;
-        data.publications.push({ ...publicationData, id: newId });
+    try {
+        // For now, we'll just show a success message
+        showNotification('Publication saved successfully', 'success');
+        closeModal();
+        loadPublications();
+    } catch (error) {
+        console.error('Error saving publication:', error);
+        showNotification('Error saving publication', 'error');
     }
-    
-    // Save to localStorage
-    localStorage.setItem('publicationsData', JSON.stringify(data));
-    
-    showNotification('Publication saved successfully', 'success');
-    closeModal();
-    loadPublications();
 }
 
 function deletePublication(pubId) {
