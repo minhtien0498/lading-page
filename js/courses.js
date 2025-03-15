@@ -16,9 +16,14 @@ function createCourseCard(course) {
                 <h3>${course.title}</h3>
                 <p class="course-description">${course.description}</p>
                 <div class="course-meta">
-                    <span class="duration"><i class="far fa-clock"></i> ${course.duration}</span>
-                    <span class="level"><i class="fas fa-signal"></i> ${course.level}</span>
-                    <span class="price"><i class="fas fa-tag"></i> ${course.price}</span>
+                    <div class="meta-row">
+                        <span class="duration"><i class="far fa-clock"></i> ${course.duration}</span>
+                        <span class="price"><i class="fas fa-tag"></i> ${course.price}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="students"><i class="fas fa-users"></i> ${course.students} học viên</span>
+                        <span class="rating"><i class="fas fa-star"></i> ${course.rating}/5</span>
+                    </div>
                 </div>
                 <button class="enroll-btn">Enroll Now</button>
             </div>
@@ -198,6 +203,37 @@ async function loadCourses() {
     }
 }
 
+// Function to generate star rating HTML
+function generateStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const decimal = rating - fullStars;
+    const stars = [];
+    
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        stars.push('<span class="star full">★</span>');
+    }
+    
+    // Add partial star if needed
+    if (decimal > 0) {
+        if (decimal >= 0.4 && decimal <= 0.6) {
+            stars.push('<span class="star half">★</span>');
+        } else if (decimal > 0.6) {
+            stars.push('<span class="star full">★</span>');
+        } else {
+            stars.push('<span class="star empty">☆</span>');
+        }
+    }
+    
+    // Add empty stars
+    const remainingStars = 5 - stars.length;
+    for (let i = 0; i < remainingStars; i++) {
+        stars.push('<span class="star empty">☆</span>');
+    }
+    
+    return stars.join('');
+}
+
 // Display courses in the grid
 function displayCourses(courses) {
     const coursesGrid = document.querySelector('.courses-grid');
@@ -238,6 +274,19 @@ function displayCourses(courses) {
                             <span>${course.price}</span>
                         </div>
                     ` : ''}
+                    <div class="detail">
+                        <i class="fas fa-users"></i>
+                        <span>${course.students || 0}</span>
+                    </div>
+                </div>
+                
+                <div class="course-rating">
+                    <div class="rating-stars">
+                        ${generateStarRating(course.rating || 0)}
+                    </div>
+                    <div class="rating-number">
+                        <i class="fas fa-star"></i> ${course.rating || 0}/5
+                    </div>
                 </div>
                 <button class="view-course-btn" onclick="showCourseDetails('${course.id}')">
                     <span>Learn More</span>
@@ -325,89 +374,74 @@ function setupCourseModals(courses) {
                 return;
             }
 
-            // Format description with paragraphs
-            const formattedDescription = course.description ? 
-                course.description.split('\n').map(p => `<p>${p}</p>`).join('') :
-                '<p>No description available.</p>';
-
-            // Format curriculum if available
-            const formattedCurriculum = course.curriculum ? 
-                `<div class="course-curriculum">
-                    <h3>Curriculum</h3>
-                    <ul class="curriculum-list">
-                        ${(() => {
-                            try {
-                                const curriculumItems = JSON.parse(course.curriculum);
-                                return curriculumItems.map(item => `
-                                    <li>
-                                        <div class="curriculum-item-main">
-                                            <i class="fas fa-check-circle"></i>
-                                            <span>${item.content}</span>
-                                        </div>
-                                        <div class="curriculum-item-info">
-                                            <span class="level-badge" data-level="${item.level}">
-                                                <i class="fas fa-signal"></i>
-                                                ${item.level}
-                                            </span>
-                                            <span class="duration-badge">
-                                                <i class="far fa-clock"></i>
-                                                ${item.duration}
-                                            </span>
-                                        </div>
-                                    </li>
-                                `).join('');
-                            } catch (error) {
-                                console.error('Error parsing curriculum:', error);
-                                return '<li>Error loading curriculum data</li>';
-                            }
-                        })()}
-                    </ul>
-                </div>` : '';
-
-            modalBody.innerHTML = `
-                <div class="course-modal-info">
-                    <div class="course-header">
-                        <img src="${course.image || DEFAULT_COURSE_IMAGE}" 
-                             alt="${course.name || 'Course'}" 
-                             class="modal-course-image"
-                             onerror="this.src='${DEFAULT_COURSE_IMAGE}'">
-                        <div class="course-header-info">
-                            <h2>${course.name || 'Course Name'}</h2>
-                            ${course.tag ? `<span class="modal-course-tag" data-tag="${course.tag}">${course.tag}</span>` : ''}
-                            <div class="course-meta">
-                                ${course.duration ? `
-                                    <div class="meta-item">
-                                        <i class="fas fa-clock"></i>
-                                        <span>${course.duration}</span>
-                                    </div>
-                                ` : ''}
-                                ${course.level ? `
-                                    <div class="meta-item">
-                                        <i class="fas fa-signal"></i>
-                                        <span>${course.level}</span>
-                                    </div>
-                                ` : ''}
-                                ${course.price ? `
-                                    <div class="meta-item">
-                                        <i class="fas fa-tag"></i>
-                                        <span>${course.price}</span>
-                                    </div>
-                                ` : ''}
+            // Parse curriculum JSON
+            let curriculumHtml = '';
+            try {
+                const curriculum = JSON.parse(course.curriculum);
+                curriculumHtml = curriculum.map(item => `
+                    <div class="curriculum-item">
+                        <div class="curriculum-header">
+                            <h4>${item.content}</h4>
+                            <div class="curriculum-meta">
+                                <span class="level">${item.level}</span>
+                                <span class="duration">${item.duration}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="course-description">
-                        ${formattedDescription}
+                `).join('');
+            } catch (error) {
+                console.error('Error parsing curriculum:', error);
+                curriculumHtml = '<p class="error">Curriculum data not available</p>';
+            }
+
+            modalBody.innerHTML = `
+                <div class="course-modal-header">
+                    <div class="course-image">
+                        <img src="${course.image || DEFAULT_COURSE_IMAGE}" 
+                             alt="${course.name}"
+                             onerror="this.src='${DEFAULT_COURSE_IMAGE}'">
                     </div>
-                    ${formattedCurriculum}
-                    ${course.registration ? `
-                        <div class="course-registration">
-                            <a href="${course.registration}" target="_blank" class="register-btn">
-                                Register Now
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
+                    <div class="course-header-info">
+                        <h2>${course.name}</h2>
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${course.duration}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-signal"></i>
+                                <span>${course.level}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-tag"></i>
+                                <span>${course.price}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>${course.students || 0} students</span>
+                            </div>
+                            <div class="meta-item rating">
+                                <i class="fas fa-star"></i>
+                                <span>${course.rating || 0}</span>
+                            </div>
                         </div>
-                    ` : ''}
+                    </div>
+                </div>
+                <div class="course-description">
+                    <h3>Course Description</h3>
+                    <p>${course.description}</p>
+                </div>
+                <div class="course-curriculum">
+                    <h3>Course Curriculum</h3>
+                    <div class="curriculum-list">
+                        ${curriculumHtml}
+                    </div>
+                </div>
+                <div class="course-actions">
+                    <a href="${course.registration}" class="enroll-button" target="_blank">
+                        <span>Enroll Now</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             `;
 

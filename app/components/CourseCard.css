@@ -1,0 +1,24 @@
+.course-card {
+    background-color: #ffffff; /* Màu nền cho thẻ card */
+    border: 1px solid #ccc; /* Đường viền cho thẻ card */
+    border-radius: 5px;
+    margin: 10px; /* Khoảng cách giữa các thẻ */
+    padding: 15px; /* Padding cho thẻ */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng cho thẻ */
+}
+
+.info-box {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0; /* Màu nền cho ô */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.info-item {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #ffffff; /* Màu nền cho từng phần */
+    border: 1px solid #ccc; /* Đường viền cho từng phần */
+    border-radius: 3px;
+} 

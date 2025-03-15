@@ -1,0 +1,20 @@
+.card {
+    /* Các thuộc tính cho card */
+}
+
+.info-box {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0; /* Màu nền cho ô */
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc; /* Đường viền cho ô bao quanh */
+}
+
+.info-item {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #ffffff; /* Màu nền cho từng phần */
+    border: 1px solid #ccc; /* Đường viền cho từng phần */
+    border-radius: 3px;
+} 

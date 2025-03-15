@@ -326,16 +326,19 @@ function validateSheetData(data, sheetName) {
     return true;
 }
 
-// Create course row HTML
+// Function to create course row HTML
 function createCourseRow(course) {
     return `
         <tr data-id="${course.id}">
             <td>${course.id}</td>
-            <td>${course.title}</td>
+            <td>${course.name}</td>
+            <td>${course.shortdescription}</td>
             <td>${course.duration}</td>
             <td>${course.price}</td>
             <td>${course.level}</td>
-            <td>${course.instructor}</td>
+            <td>${course.tag}</td>
+            <td>${course.students || 0}</td>
+            <td>${course.rating || 0}</td>
             <td>
                 <div class="toggle-switch">
                     <input type="checkbox" id="course-show-${course.id}" ${course.isshow ? 'checked' : ''}>
@@ -377,6 +380,197 @@ async function loadCourses() {
     }
 }
 
+// Function to edit course
+async function editCourse(courseId) {
+    try {
+        const data = await loadFromGoogleSheets(SHEET_NAMES.courses);
+        const course = data.find(c => c.id === courseId);
+        
+        if (course) {
+            showModal('Edit Course');
+            const modalForm = document.getElementById('modalForm');
+            modalForm.innerHTML = `
+                <input type="hidden" name="id" value="${course.id}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value="${course.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tag</label>
+                        <select name="tag" required>
+                            <option value="">Select Tag</option>
+                            <option value="New" ${course.tag === 'New' ? 'selected' : ''}>New</option>
+                            <option value="Popular" ${course.tag === 'Popular' ? 'selected' : ''}>Popular</option>
+                            <option value="Featured" ${course.tag === 'Featured' ? 'selected' : ''}>Featured</option>
+                            <option value="Essential" ${course.tag === 'Essential' ? 'selected' : ''}>Essential</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <input type="text" name="shortdescription" value="${course.shortdescription}" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Description</label>
+                    <textarea name="description" required>${course.description}</textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" name="image" value="${course.image}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Registration URL</label>
+                        <input type="url" name="registration" value="${course.registration}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="duration" value="${course.duration}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" name="price" value="${course.price}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Level</label>
+                        <select name="level" required>
+                            <option value="">Select Level</option>
+                            <option value="Beginner" ${course.level === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                            <option value="Intermediate" ${course.level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+                            <option value="Advanced" ${course.level === 'Advanced' ? 'selected' : ''}>Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Students Count</label>
+                        <input type="number" name="students" value="${course.students || 0}" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (0-5)</label>
+                        <input type="number" name="rating" value="${course.rating || 0}" min="0" max="5" step="0.1" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Curriculum (JSON format)</label>
+                    <textarea name="curriculum" required>${course.curriculum}</textarea>
+                </div>
+                <div class="form-group toggle-group">
+                    <label>Show Course</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" name="isshow" id="course-show-edit-${course.id}" ${course.isshow ? 'checked' : ''}>
+                        <label for="course-show-edit-${course.id}"></label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Update Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            `;
+            modalForm.onsubmit = handleCourseSubmit;
+        } else {
+            showNotification('Course not found', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading course data:', error);
+        showNotification('Error loading course data: ' + error.message, 'error');
+    }
+}
+
+// Function to add new course
+function addCourse() {
+    showModal('Add New Course');
+    const modalForm = document.getElementById('modalForm');
+    modalForm.innerHTML = `
+        <div class="form-row">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Tag</label>
+                <select name="tag" required>
+                    <option value="">Select Tag</option>
+                    <option value="New">New</option>
+                    <option value="Popular">Popular</option>
+                    <option value="Featured">Featured</option>
+                    <option value="Essential">Essential</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Short Description</label>
+            <input type="text" name="shortdescription" required>
+        </div>
+        <div class="form-group">
+            <label>Full Description</label>
+            <textarea name="description" required></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Image URL</label>
+                <input type="url" name="image" required>
+            </div>
+            <div class="form-group">
+                <label>Registration URL</label>
+                <input type="url" name="registration" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Duration</label>
+                <input type="text" name="duration" required>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="text" name="price" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Level</label>
+                <select name="level" required>
+                    <option value="">Select Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Students Count</label>
+                <input type="number" name="students" value="0" min="0" required>
+            </div>
+            <div class="form-group">
+                <label>Rating (0-5)</label>
+                <input type="number" name="rating" value="0" min="0" max="5" step="0.1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Curriculum (JSON format)</label>
+            <textarea name="curriculum" required></textarea>
+        </div>
+        <div class="form-group toggle-group">
+            <label>Show Course</label>
+            <div class="toggle-switch">
+                <input type="checkbox" name="isshow" id="course-show-new" checked>
+                <label for="course-show-new"></label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Course</button>
+            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    `;
+    modalForm.onsubmit = handleCourseSubmit;
+}
+
 // Handle course submit
 async function handleCourseSubmit(event) {
     event.preventDefault();
@@ -389,13 +583,9 @@ async function handleCourseSubmit(event) {
         // Convert checkbox value to boolean
         courseData.isshow = courseData.isshow === 'on';
         
-        // Ensure all required fields are present
-        const requiredFields = ['title', 'duration', 'price', 'description', 'instructor', 'level', 'category'];
-        for (const field of requiredFields) {
-            if (!courseData[field]) {
-                throw new Error(`Missing required field: ${field}`);
-            }
-        }
+        // Convert numeric fields
+        courseData.students = parseInt(courseData.students) || 0;
+        courseData.rating = parseFloat(courseData.rating) || 0;
         
         // Determine if this is an update or insert
         const action = courseData.id ? 'update' : 'insert';
